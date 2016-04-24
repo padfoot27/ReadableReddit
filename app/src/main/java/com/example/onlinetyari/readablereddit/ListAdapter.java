@@ -42,6 +42,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         TextView textView = holder.title;
         SimpleDraweeView simpleDraweeView = holder.simpleDraweeView;
+        TextView comments = holder.comments;
+        TextView points = holder.points;
 
         textView.setText(post.data.title);
         String[] splitURL = post.data.url.split(".");
@@ -54,9 +56,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             simpleDraweeView.setImageURI(uri);
         }
 
-        /*Uri imageUri = Uri.parse("https://i.imgur.com/tGbaZCY.jpg");
-        simpleDraweeView.setImageURI(imageUri);*/
-
+        comments.setText(post.data.num_comments + " Comments");
+        points.setText("Score " + post.data.score);
     }
 
     @Override
@@ -68,11 +69,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         public TextView title;
         public SimpleDraweeView simpleDraweeView;
+        public TextView comments;
+        public TextView points;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.my_image_view);
+            comments = (TextView) itemView.findViewById(R.id.comments);
+            points = (TextView) itemView.findViewById(R.id.points);
         }
     }
 }

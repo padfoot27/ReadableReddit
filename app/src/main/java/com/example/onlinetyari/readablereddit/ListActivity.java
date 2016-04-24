@@ -77,7 +77,6 @@ public class ListActivity extends AppCompatActivity {
                     postList.setLayoutManager(new LinearLayoutManager(this));
 
                 });
-
     }
 
     @Override
