@@ -1,6 +1,7 @@
-package com.example.onlinetyari.readablereddit;
+package com.example.onlinetyari.readablereddit.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.onlinetyari.readablereddit.pojo.Post;
+import com.example.onlinetyari.readablereddit.R;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.List;
 
@@ -19,11 +23,22 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Post> mPosts;
+    private Resources resources;
 
-    public ListAdapter(List<Post> posts) {
+    public ListAdapter(List<Post> posts, Resources resources) {
         this.mPosts = posts;
+        this.resources = resources;
     }
 
+    private static OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView,int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        onItemClickListener = listener;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -56,8 +71,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             simpleDraweeView.setImageURI(uri);
         }
 
-        comments.setText(post.data.num_comments + " Comments");
-        points.setText("Score " + post.data.score);
+
+        comments.setText(String.format(resources.getString(R.string.comments), post.data.num_comments));
+        points.setText(String.format(resources.getString(R.string.score), post.data.score));
     }
 
     @Override
@@ -65,7 +81,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mPosts.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView title;
         public SimpleDraweeView simpleDraweeView;
@@ -78,6 +96,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.my_image_view);
             comments = (TextView) itemView.findViewById(R.id.comments);
             points = (TextView) itemView.findViewById(R.id.points);
+
+            RxView.clicks(itemView)
+                    .subscribe(aVoid -> {
+                        if (onItemClickListener != null)
+                            onItemClickListener.onItemClick(itemView,getLayoutPosition());
+                    });
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Post post = mPosts.get(position);
+
         }
     }
 }

@@ -1,14 +1,13 @@
-package com.example.onlinetyari.readablereddit;
+package com.example.onlinetyari.readablereddit.pojo;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Created by Siddharth Verma on 24/4/16.
  */
-public class InitialData {
-
+public class Post {
     @Expose
-    public Listing data;
+    public PostData data;
     @Expose
     public String kind;
 }

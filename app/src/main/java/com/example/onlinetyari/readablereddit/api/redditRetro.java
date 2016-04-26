@@ -1,4 +1,6 @@
-package com.example.onlinetyari.readablereddit;
+package com.example.onlinetyari.readablereddit.api;
+
+import com.example.onlinetyari.readablereddit.pojo.InitialData;
 
 import retrofit2.http.GET;
 import retrofit2.http.Url;

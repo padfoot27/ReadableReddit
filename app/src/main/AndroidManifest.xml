@@ -5,12 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher_reddit"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ListActivity"
+            android:name=".activity.ListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,22 +20,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayPostActivity"
+            android:name=".activity.DisplayPostActivity"
             android:label="@string/title_activity_display_post"
-            android:parentActivityName=".ListActivity"
+            android:parentActivityName=".activity.ListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.onlinetyari.readablereddit.ListActivity" />
+                android:value=".activity.ListActivity" />
         </activity>
         <activity
-            android:name=".DisplatCommentsActivity"
+            android:name=".activity.DisplatCommentsActivity"
             android:label="@string/title_activity_displat_comments"
-            android:parentActivityName=".DisplayPostActivity"
+            android:parentActivityName=".activity.DisplayPostActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.onlinetyari.readablereddit.DisplayPostActivity" />
+                android:value=".activity.DisplayPostActivity" />
         </activity>
     </application>
 

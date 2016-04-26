@@ -1,4 +1,4 @@
-package com.example.onlinetyari.readablereddit;
+package com.example.onlinetyari.readablereddit.pojo;
 
 import com.google.gson.annotations.Expose;
 

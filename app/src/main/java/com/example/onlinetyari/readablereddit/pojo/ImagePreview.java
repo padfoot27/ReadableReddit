@@ -1,6 +1,4 @@
-package com.example.onlinetyari.readablereddit;
-
-import android.media.*;
+package com.example.onlinetyari.readablereddit.pojo;
 
 import com.google.gson.annotations.Expose;
 
@@ -12,5 +10,5 @@ import java.util.List;
 public class ImagePreview {
 
     @Expose
-    public List<Image> images;
+    public List<com.example.onlinetyari.readablereddit.pojo.Image> images;
 }
