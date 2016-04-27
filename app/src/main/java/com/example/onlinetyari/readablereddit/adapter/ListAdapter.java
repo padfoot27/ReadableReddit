@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.onlinetyari.readablereddit.pojo.Post;
 import com.example.onlinetyari.readablereddit.R;
+import com.example.onlinetyari.readablereddit.pojo.PostData;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -22,10 +21,10 @@ import java.util.List;
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private List<Post> mPosts;
+    public List<PostData> mPosts;
     private Resources resources;
 
-    public ListAdapter(List<Post> posts, Resources resources) {
+    public ListAdapter(List<PostData> posts, Resources resources) {
         this.mPosts = posts;
         this.resources = resources;
     }
@@ -53,27 +52,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Post post = mPosts.get(position);
+        PostData postData = mPosts.get(position);
 
         TextView textView = holder.title;
         SimpleDraweeView simpleDraweeView = holder.simpleDraweeView;
         TextView comments = holder.comments;
         TextView points = holder.points;
 
-        textView.setText(post.data.title);
-        String[] splitURL = post.data.url.split(".");
-        String url = post.data.url;
+        textView.setText(postData.title);
+        String[] splitURL = postData.url.split(".");
+        String url = postData.url;
         String[] a = url.split(".");
-        if (post.data.url != null && !post.data.url.isEmpty()) {
-            Log.v("link", post.data.url);
+        if (postData.url != null && !postData.url.isEmpty()) {
 
             Uri uri = Uri.parse(url);
             simpleDraweeView.setImageURI(uri);
         }
 
 
-        comments.setText(String.format(resources.getString(R.string.comments), post.data.num_comments));
-        points.setText(String.format(resources.getString(R.string.score), post.data.score));
+        comments.setText(String.format(resources.getString(R.string.comments), postData.num_comments));
+        points.setText(String.format(resources.getString(R.string.score), postData.score));
     }
 
     @Override
@@ -107,8 +105,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             int position = getLayoutPosition();
-            Post post = mPosts.get(position);
+            PostData postData = mPosts.get(position);
 
         }
+    }
+
+    public void addItems(PostData postData) {
+        mPosts.add(postData);
     }
 }

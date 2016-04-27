@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.example.onlinetyari.readablereddit.adapter.ListTabbedFragment;
 import com.example.onlinetyari.readablereddit.R;
+import com.example.onlinetyari.readablereddit.api.RedditAPI;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 public class ListActivity extends AppCompatActivity {
@@ -20,6 +21,11 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         setContentView(R.layout.activity_list);
+
+
+        RedditAPI redditAPI = new RedditAPI();
+        RedditAPI.setupRedditAPI();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -30,6 +36,7 @@ public class ListActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
 
