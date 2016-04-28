@@ -4,25 +4,34 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.jakewharton.rxbinding.view.RxView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.net.URL;
 import java.util.List;
+
 
 /**
  * Created by Siddharth Verma on 23/4/16.
  */
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<PostData> mPosts;
     private Resources resources;
+    public static final int TEXT = 0;
+    public static final int TITLE = 1;
+    public static final int IMAGE_GIF = 2;
+    public static final int LINK = 3;
+    public static final String IMGUR_HOST_IMAGE = "i.imgur.com";
+    public static final String IMGUR_HOST = "imgur.com";
+    public static final String IMGUR_HOST_ALBUM = "a";
 
     public ListAdapter(List<PostData> posts, Resources resources) {
         this.mPosts = posts;
@@ -39,39 +48,58 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         onItemClickListener = listener;
     }
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View postView = inflater.inflate(R.layout.item_post, parent, false);
+        RecyclerView.ViewHolder viewHolder;
 
-        return new ViewHolder(postView);
-    }
+        switch (viewType) {
+            case TEXT : View v1 = inflater.inflate(R.layout.layout_viewholder_text, parent, false);
+                        viewHolder = new ViewHolderText(v1);
+                        break;
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+            case TITLE : View v2 = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
+                         viewHolder = new ViewHolderTitle(v2);
+                         break;
 
-        PostData postData = mPosts.get(position);
+            case IMAGE_GIF : View v3 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
+                             viewHolder = new ViewHolderImageGIF(v3);
+                             break;
 
-        TextView textView = holder.title;
-        SimpleDraweeView simpleDraweeView = holder.simpleDraweeView;
-        TextView comments = holder.comments;
-        TextView points = holder.points;
+            case LINK : View v4 = inflater.inflate(R.layout.layout_viewholder_link, parent, false);
+                        viewHolder = new ViewHolderLink(v4);
+                        break;
 
-        textView.setText(postData.title);
-        String[] splitURL = postData.url.split(".");
-        String url = postData.url;
-        String[] a = url.split(".");
-        if (postData.url != null && !postData.url.isEmpty()) {
-
-            Uri uri = Uri.parse(url);
-            simpleDraweeView.setImageURI(uri);
+            default : View v = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
+                      viewHolder = new ViewHolderTitle(v);
+                      break;
         }
 
+        return viewHolder;
+    }
 
-        comments.setText(String.format(resources.getString(R.string.comments), postData.num_comments));
-        points.setText(String.format(resources.getString(R.string.score), postData.score));
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        switch (holder.getItemViewType()) {
+
+            case TEXT : configureTextViewHolder((ViewHolderText) holder, position);
+                        break;
+            case TITLE : configureTitleViewHolder((ViewHolderTitle) holder, position);
+                         break;
+
+            case IMAGE_GIF : configureTextViewImageGIF((ViewHolderImageGIF) holder, position);
+                             break;
+
+            case LINK : configureLinkViewHolder((ViewHolderLink) holder, position);
+                        break;
+
+            default : configureTitleViewHolder((ViewHolderTitle) holder, position);
+                      break;
+        }
     }
 
     @Override
@@ -79,38 +107,93 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mPosts.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
 
+        boolean image_gif = false;
+        URL url = null;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public TextView title;
-        public SimpleDraweeView simpleDraweeView;
-        public TextView comments;
-        public TextView points;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.my_image_view);
-            comments = (TextView) itemView.findViewById(R.id.comments);
-            points = (TextView) itemView.findViewById(R.id.points);
-
-            RxView.clicks(itemView)
-                    .subscribe(aVoid -> {
-                        if (onItemClickListener != null)
-                            onItemClickListener.onItemClick(itemView,getLayoutPosition());
-                    });
+        try {
+            url = new URL(mPosts.get(position).getUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-            PostData postData = mPosts.get(position);
+        if (url != null) {
+            String host = url.getHost();
+            String path = url.getPath();
+            String query = url.getQuery();
 
+            if (host.equals(IMGUR_HOST_IMAGE)) {
+                image_gif = true;
+            }
+
+            String[] splitPath = path.split("/");
+
+            if (host.equals(IMGUR_HOST) && splitPath.length > 1 && !splitPath[1].equals(IMGUR_HOST_ALBUM))
+                image_gif = true;
+        }
+
+        if (mPosts.get(position).selftext != null && !mPosts.get(position).selftext.isEmpty()) {
+            return TEXT;
+        }
+
+        else if (mPosts.get(position).selftext != null && !mPosts.get(position).selftext.isEmpty()
+                && mPosts.get(position).preview == null) {
+            return TITLE;
+        }
+
+        else if (image_gif){
+
+            return IMAGE_GIF;
+        }
+
+        else {
+            return LINK;
         }
     }
 
     public void addItems(PostData postData) {
         mPosts.add(postData);
+    }
+
+    public void configureTextViewHolder(ViewHolderText viewHolderText, int position) {
+
+        viewHolderText.textView.setText(mPosts.get(position).getTitle());
+        viewHolderText.textViewText.setText(mPosts.get(position).getSelftext());
+        viewHolderText.points.setText(String.valueOf(mPosts.get(position).getScore()));
+        viewHolderText.comments.setText(mPosts.get(position).getNum_comments());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
+        viewHolderText.share.setImageURI(imageRequest.getSourceUri());
+    }
+
+    public void configureTitleViewHolder(ViewHolderTitle viewHolderTitle, int position) {
+
+        viewHolderTitle.textView.setText(mPosts.get(position).getTitle());
+        viewHolderTitle.points.setText(String .valueOf(mPosts.get(position).getScore()));
+        viewHolderTitle.comments.setText(mPosts.get(position).getNum_comments());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
+        viewHolderTitle.share.setImageURI(imageRequest.getSourceUri());
+    }
+
+    public void configureLinkViewHolder(ViewHolderLink viewHolderLink, int position) {
+
+        viewHolderLink.textView.setText(mPosts.get(position).getTitle());
+        viewHolderLink.textViewText.setText(String.valueOf(mPosts.get(position).getUrl()));
+        viewHolderLink.comments.setText(mPosts.get(position).getNum_comments());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
+        viewHolderLink.share.setImageURI(imageRequest.getSourceUri());
+        viewHolderLink.points.setText(String .valueOf(mPosts.get(position).getScore()));
+    }
+
+    public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position) {
+
+        viewHolderImageGIF.textView.setText(mPosts.get(position).getTitle());
+        Uri imageUri = Uri.parse(mPosts.get(position).getUrl());
+        viewHolderImageGIF.image_gif.setImageURI(imageUri);
+        viewHolderImageGIF.points.setText(String.valueOf(mPosts.get(position).getScore()));
+        viewHolderImageGIF.comments.setText(mPosts.get(position).getNum_comments());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
+        viewHolderImageGIF.share.setImageURI(imageRequest.getSourceUri());
     }
 }

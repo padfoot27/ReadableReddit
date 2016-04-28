@@ -21,7 +21,7 @@ import rx.Observable;
 public class PostsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "postsDatabase";
-    private static final Integer DATABASE_VERSION = 3;
+    private static final Integer DATABASE_VERSION = 4;
 
     private static final String TABLE_POSTS = "posts";
 
@@ -78,6 +78,7 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
+        Cursor cursor = null;
         try {
             ContentValues contentValues = new ContentValues();
 
@@ -87,11 +88,20 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(KEY_COMMENTS, postData.num_comments);
             contentValues.put(KEY_SECTION, section);
 
-            db.insertOrThrow(TABLE_POSTS, null, contentValues);
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s = ? AND %s = ?", KEY_POST_TITLE, TABLE_POSTS, KEY_POST_TITLE, KEY_SECTION);
+
+            cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(postData.title), section});
+
+            if (cursor.getCount() == 0)
+                db.insertOrThrow(TABLE_POSTS, null, contentValues);
             db.setTransactionSuccessful();
         } catch (Exception e) {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
             e.printStackTrace();
         } finally {
+
             db.endTransaction();
         }
 

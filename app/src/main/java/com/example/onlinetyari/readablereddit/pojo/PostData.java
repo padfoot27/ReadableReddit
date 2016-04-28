@@ -1,6 +1,5 @@
 package com.example.onlinetyari.readablereddit.pojo;
 
-import com.example.onlinetyari.readablereddit.pojo.ImagePreview;
 import com.google.gson.annotations.Expose;
 
 /**

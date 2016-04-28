@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -89,17 +91,17 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
 
         switch (page) {
 
-            case 0 : url = "https://api.reddit.com/r/pics/hot.json";
+            case 0 : url = "https://api.reddit.com/r/askreddit/hot.json";
                      section = "hot";
                      break;
 
-            case 1 : url = "https://api.reddit.com/r/pics/rising.json";
+            case 1 : url = "https://api.reddit.com/r/askreddit/rising.json";
                      section = "rising";
                      break;
-            case 2 : url = "https://api.reddit.com/r/pics/new.json";
+            case 2 : url = "https://api.reddit.com/r/askreddit/new.json";
                      section = "new";
                      break;
-            default : url = "https://api.reddit.com/r/pics/rising.json";
+            default : url = "https://api.reddit.com/r/askreddit/rising.json";
                       section = "rising";
         }
 
@@ -109,8 +111,6 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                             .map(post -> post.data)
                             .toList();
 
-
-
         Observable<List<PostData>> disk = PostsDatabaseHelper.getInstance(context)
                             .getAllPosts(section);
 
@@ -119,9 +119,12 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                 .first();
 
         Subscription subscription =
-                source.subscribeOn(Schedulers.io())
+                network.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).flatMap(Observable::from)
-                .doOnNext(postData -> PostsDatabaseHelper.getInstance(context).addPost(postData, section))
+                .doOnNext(postData -> {
+                    Log.v("postData", postData.getUrl());
+                    PostsDatabaseHelper.getInstance(context).addPost(postData, section);
+                }).doOnCompleted(() -> Log.v("abc", "completed"))
                 .subscribe(postData1 -> {
                     if (!listAdapter.mPosts.contains(postData1)) {
                         listAdapter.mPosts.add(postData1);
@@ -129,23 +132,6 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                     }
                 });
 
-
-        /*Subscription subscription = RedditAPI.redditRetroService.getData(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(initialData -> {
-                    for (Post post : initialData.data.children) {
-                        PostsDatabaseHelper.getInstance(context).addPost(post.data);
-                    }
-                })
-                .subscribe(initialData ->
-                {
-                    //listAdapter = new ListAdapter(initialData.data.children, resources);
-                    listAdapter.setOnItemClickListener(this);
-                    // initialDataReceived = initialData;
-                    postList.setAdapter(listAdapter);
-                    postList.setLayoutManager(new LinearLayoutManager(context));
-                });*/
         compositeSubscription.add(subscription);
         return view;
     }
@@ -153,8 +139,8 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
     @Override
     public void onItemClick(View itemView, int position) {
         Intent intent = new Intent(context, DisplayPostActivity.class);
-        //intent.putExtra(IntentConstants.DISPLAY_TITLE, initialDataReceived.data.children.get(position).data.title);
-        //intent.putExtra(IntentConstants.DISPLAY_IMAGE, initialDataReceived.data.children.get(position).data.url);
+        intent.putExtra(IntentConstants.DISPLAY_TITLE, listAdapter.mPosts.get(position).title);
+        intent.putExtra(IntentConstants.DISPLAY_IMAGE, listAdapter.mPosts.get(position).url);
 
         startActivity(intent);
     }
