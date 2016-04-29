@@ -15,6 +15,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:textColorLink="#8DE67F"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewText"
         android:maxLines="4"

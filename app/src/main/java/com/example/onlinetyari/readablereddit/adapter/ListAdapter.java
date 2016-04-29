@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int IMAGE_GIF = 2;
     public static final int LINK = 3;
     public static final String IMGUR_HOST_IMAGE = "i.imgur.com";
-    public static final String IMGUR_HOST = "imgur.com";
+    public static final String IMGUR_HOST_IMAGE_MOBILE = "m.imgur.com";
     public static final String IMGUR_HOST_ALBUM = "a";
+    public static final String IMGUR_GALLERY = "gallery";
+    public static final String IMGUR_HOST = "imgur.com";
 
     public ListAdapter(List<PostData> posts, Resources resources) {
         this.mPosts = posts;
@@ -124,22 +125,29 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String path = url.getPath();
             String query = url.getQuery();
 
-            if (host.equals(IMGUR_HOST_IMAGE)) {
-                image_gif = true;
+
+            if (host.equals(IMGUR_HOST_IMAGE) || host.equals(IMGUR_HOST) || host.equals(IMGUR_HOST_IMAGE_MOBILE)) {
+
+                if (host.equals(IMGUR_HOST_IMAGE)) {
+                    image_gif = true;
+                }
+
+                String[] splitPath = path.split("/");
+
+                if (!image_gif && splitPath.length > 1 &&
+                        !splitPath[1].equals(IMGUR_HOST_ALBUM) && !splitPath[1].equals(IMGUR_GALLERY)) {
+                    mPosts.get(position).setUrl(mPosts.get(position).getUrl() + ".png");
+                    image_gif = true;
+                }
             }
-
-            String[] splitPath = path.split("/");
-
-            if (host.equals(IMGUR_HOST) && splitPath.length > 1 && !splitPath[1].equals(IMGUR_HOST_ALBUM))
-                image_gif = true;
         }
 
         if (mPosts.get(position).selftext != null && !mPosts.get(position).selftext.isEmpty()) {
             return TEXT;
         }
 
-        else if (mPosts.get(position).selftext != null && !mPosts.get(position).selftext.isEmpty()
-                && mPosts.get(position).preview == null) {
+        else if (mPosts.get(position).selftext != null && mPosts.get(position).selftext.isEmpty()
+                && mPosts.get(position).preview == null && mPosts.get(position).getUrl().isEmpty()) {
             return TITLE;
         }
 

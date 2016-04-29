@@ -91,17 +91,17 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
 
         switch (page) {
 
-            case 0 : url = "https://api.reddit.com/r/askreddit/hot.json";
+            case 0 : url = "https://api.reddit.com/r/news/hot.json";
                      section = "hot";
                      break;
 
-            case 1 : url = "https://api.reddit.com/r/askreddit/rising.json";
+            case 1 : url = "https://api.reddit.com/r/news/rising.json";
                      section = "rising";
                      break;
-            case 2 : url = "https://api.reddit.com/r/askreddit/new.json";
+            case 2 : url = "https://api.reddit.com/r/news/new.json";
                      section = "new";
                      break;
-            default : url = "https://api.reddit.com/r/askreddit/rising.json";
+            default : url = "https://api.reddit.com/r/news/rising.json";
                       section = "rising";
         }
 
