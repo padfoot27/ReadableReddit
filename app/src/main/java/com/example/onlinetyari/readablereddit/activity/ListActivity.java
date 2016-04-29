@@ -2,7 +2,10 @@ package com.example.onlinetyari.readablereddit.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,18 +19,26 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 public class ListActivity extends AppCompatActivity {
 
 
+    private Toolbar toolbar;
+    private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         setContentView(R.layout.activity_list);
 
-
         RedditAPI redditAPI = new RedditAPI();
         RedditAPI.setupRedditAPI();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.syncState();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.vpPager);
         ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
@@ -36,7 +47,6 @@ public class ListActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
 
@@ -55,10 +65,18 @@ public class ListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
+        switch (id) {
+            case  R.id.action_settings : return true;
+
+            case android.R.id.home : mDrawer.openDrawer(GravityCompat.START);
+                                     return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
     }
 }

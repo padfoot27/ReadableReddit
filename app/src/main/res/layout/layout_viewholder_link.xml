@@ -6,9 +6,10 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textView"
+        android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.11" />
 
@@ -16,29 +17,33 @@
         android:id="@+id/textViewText"
         android:autoLink="all"
         android:textColorLink="#8DE67F"
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.06">
 
         <TextView
             android:id="@+id/points"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/comments"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/share"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_weight="0.61" />
     </LinearLayout>
 </LinearLayout>
