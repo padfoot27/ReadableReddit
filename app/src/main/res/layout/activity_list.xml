@@ -24,8 +24,16 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="#303030"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/sliding_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#303030" />
+
 
         </android.support.design.widget.AppBarLayout>
 
@@ -38,6 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/white"
-        app:menu="@menu/drawer_view" />
+        android:background="#212121"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_view" >
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

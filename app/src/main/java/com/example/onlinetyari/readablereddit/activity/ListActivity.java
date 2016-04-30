@@ -1,6 +1,8 @@
 package com.example.onlinetyari.readablereddit.activity;
 
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -10,11 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.onlinetyari.readablereddit.adapter.ListTabbedFragment;
 import com.example.onlinetyari.readablereddit.R;
-import com.example.onlinetyari.readablereddit.api.RedditAPI;
-import com.facebook.drawee.backends.pipeline.Fresco;
+import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
+
+import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -22,15 +27,13 @@ public class ListActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(this);
         setContentView(R.layout.activity_list);
-
-        RedditAPI redditAPI = new RedditAPI();
-        RedditAPI.setupRedditAPI();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,8 +43,13 @@ public class ListActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
         actionBarDrawerToggle.syncState();
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.vpPager);
+        navigationView = (NavigationView) findViewById(R.id.nvView);
+        setupDrawerContent(navigationView);
+
+        viewPager = (ViewPager) findViewById(R.id.vpPager);
+        viewPager.setOffscreenPageLimit(2);
         ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+        listTabbedFragment.setSubReddit(FragmentConstants.SCIENCE);
         viewPager.setAdapter(listTabbedFragment);
         viewPager.setCurrentItem(1);
 
@@ -78,5 +86,45 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                item -> {
+                    selectDrawerItem(item);
+                    return true;
+                }
+        );
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+
+        ListTabbedFragment listTabbedFragment;
+
+        switch (menuItem.getItemId()) {
+            case R.id.ask_redddit :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.ASK_REDDIT);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                break;
+
+            case R.id.pics :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.PICS);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                break;
+
+            case R.id.science :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.SCIENCE);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                break;
+        }
     }
 }

@@ -14,23 +14,41 @@ import com.example.onlinetyari.readablereddit.fragment.ListFragment;
  */
 public class ListTabbedFragment extends FragmentStatePagerAdapter {
 
+    public String subReddit;
+
     private static Integer NUM_ITEMS = 3;
     String[] tabTitles = new String[] {FragmentConstants.HOT, FragmentConstants.RISING, FragmentConstants.NEW};
+
     public ListTabbedFragment(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
+
+    public void setSubReddit(String subReddit) {
+        this.subReddit = subReddit;
+    }
+
     @Override
     public Fragment getItem(int position) {
 
+        ListFragment fragment;
+
         switch (position) {
 
-            case 0 : return ListFragment.newInstance(FragmentConstants.HOT, 0);
+            case 0 : fragment = ListFragment.newInstance(FragmentConstants.HOT, 0);
+                     fragment.setSubReddit(subReddit);
+                     return fragment;
 
-            case 1 : return ListFragment.newInstance(FragmentConstants.RISING, 1);
+            case 1 : fragment = ListFragment.newInstance(FragmentConstants.RISING, 1);
+                     fragment.setSubReddit(subReddit);
+                     return fragment;
 
-            case 2 : return ListFragment.newInstance(FragmentConstants.NEW, 2);
+            case 2 : fragment = ListFragment.newInstance(FragmentConstants.NEW, 2);
+                     fragment.setSubReddit(subReddit);
+                     return fragment;
 
-            default : return ListFragment.newInstance(FragmentConstants.RISING, 1);
+            default : fragment = ListFragment.newInstance(FragmentConstants.RISING, 1);
+                      fragment.setSubReddit(subReddit);
+                      return fragment;
         }
     }
 

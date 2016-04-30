@@ -2,10 +2,11 @@ package com.example.onlinetyari.readablereddit.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.onlinetyari.readablereddit.R;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Created by Siddharth Verma on 28/4/16.
@@ -13,17 +14,17 @@ import com.facebook.drawee.view.SimpleDraweeView;
 public class ViewHolderImageGIF extends RecyclerView.ViewHolder {
 
     public TextView textView;
-    public SimpleDraweeView image_gif;
+    public ImageView image_gif;
     public TextView comments;
     public TextView points;
-    public SimpleDraweeView share;
+    public Button share;
 
     public ViewHolderImageGIF(View itemView) {
         super(itemView);
         textView = (TextView) itemView.findViewById(R.id.textView);
-        image_gif = (SimpleDraweeView) itemView.findViewById(R.id.image);
+        image_gif = (ImageView) itemView.findViewById(R.id.image);
         comments = (TextView) itemView.findViewById(R.id.comments);
         points = (TextView) itemView.findViewById(R.id.points);
-        share = (SimpleDraweeView) itemView.findViewById(R.id.share);
+        share = (Button) itemView.findViewById(R.id.share);
     }
 }

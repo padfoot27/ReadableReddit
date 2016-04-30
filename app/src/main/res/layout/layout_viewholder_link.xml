@@ -1,49 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
 
-    <TextView
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="#FAFAFA">
+
+    <include layout="@layout/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textView"
-        android:layout_marginBottom="5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.11" />
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:id="@+id/textViewText"
+        android:paddingLeft="5dp"
         android:autoLink="all"
-        android:textColorLink="#8DE67F"
-        android:layout_marginBottom="5dp"
+        android:textColorLink="#0099FF"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.16" />
+        android:layout_height="wrap_content"/>
 
-    <LinearLayout
+    <include layout="@layout/comment_score_share"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.06">
-
-        <TextView
-            android:id="@+id/points"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/comments"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/share"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:layout_weight="0.61" />
-    </LinearLayout>
-</LinearLayout>
+        android:layout_below="@id/textViewText"
+        android:layout_height="wrap_content">
+    </include>
+</RelativeLayout>

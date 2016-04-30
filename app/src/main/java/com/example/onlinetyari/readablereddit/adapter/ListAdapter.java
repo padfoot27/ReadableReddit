@@ -1,17 +1,21 @@
 package com.example.onlinetyari.readablereddit.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.support.annotation.RequiresPermission;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.onlinetyari.readablereddit.R;
+import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.net.URL;
 import java.util.List;
@@ -169,39 +173,78 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         viewHolderText.textView.setText(mPosts.get(position).getTitle());
         viewHolderText.textViewText.setText(mPosts.get(position).getSelftext());
-        viewHolderText.points.setText(String.valueOf(mPosts.get(position).getScore()));
-        viewHolderText.comments.setText(mPosts.get(position).getNum_comments());
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
-        viewHolderText.share.setImageURI(imageRequest.getSourceUri());
+        viewHolderText.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
+        viewHolderText.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        RxView.clicks(viewHolderText.share)
+                .subscribe(aVoid -> {
+                    if (mPosts.get(position).getUrl() != null)
+                        shareFunction(mPosts.get(position).getUrl());
+                    else
+                        shareFunction(mPosts.get(position).getTitle());
+                });
     }
 
     public void configureTitleViewHolder(ViewHolderTitle viewHolderTitle, int position) {
 
         viewHolderTitle.textView.setText(mPosts.get(position).getTitle());
-        viewHolderTitle.points.setText(String .valueOf(mPosts.get(position).getScore()));
-        viewHolderTitle.comments.setText(mPosts.get(position).getNum_comments());
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
-        viewHolderTitle.share.setImageURI(imageRequest.getSourceUri());
+        viewHolderTitle.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
+        viewHolderTitle.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        RxView.clicks(viewHolderTitle.share)
+                .subscribe(aVoid -> {
+                    if (mPosts.get(position).getUrl() != null)
+                        shareFunction(mPosts.get(position).getUrl());
+                    else
+                        shareFunction(mPosts.get(position).getTitle());
+                });
     }
 
     public void configureLinkViewHolder(ViewHolderLink viewHolderLink, int position) {
 
         viewHolderLink.textView.setText(mPosts.get(position).getTitle());
         viewHolderLink.textViewText.setText(String.valueOf(mPosts.get(position).getUrl()));
-        viewHolderLink.comments.setText(mPosts.get(position).getNum_comments());
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
-        viewHolderLink.share.setImageURI(imageRequest.getSourceUri());
-        viewHolderLink.points.setText(String .valueOf(mPosts.get(position).getScore()));
+        viewHolderLink.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
+        viewHolderLink.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+
+        RxView.clicks(viewHolderLink.share)
+                .subscribe(aVoid -> {
+                    if (mPosts.get(position).getUrl() != null)
+                        shareFunction(mPosts.get(position).getUrl());
+                    else
+                        shareFunction(mPosts.get(position).getTitle());
+                });
     }
 
     public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position) {
 
+
         viewHolderImageGIF.textView.setText(mPosts.get(position).getTitle());
-        Uri imageUri = Uri.parse(mPosts.get(position).getUrl());
-        viewHolderImageGIF.image_gif.setImageURI(imageUri);
-        viewHolderImageGIF.points.setText(String.valueOf(mPosts.get(position).getScore()));
-        viewHolderImageGIF.comments.setText(mPosts.get(position).getNum_comments());
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.comments).build();
-        viewHolderImageGIF.share.setImageURI(imageRequest.getSourceUri());
+
+        Glide
+                .with(ReadableRedditApp.getAppContext())
+                .load(mPosts.get(position).getUrl())
+                .placeholder(R.drawable.placeholder)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(viewHolderImageGIF.image_gif);
+
+        viewHolderImageGIF.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
+        viewHolderImageGIF.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+
+        RxView.clicks(viewHolderImageGIF.share)
+                .subscribe(aVoid -> {
+                    if (mPosts.get(position).getUrl() != null)
+                        shareFunction(mPosts.get(position).getUrl());
+                    else
+                        shareFunction(mPosts.get(position).getTitle());
+                });
+    }
+
+    public void shareFunction(String item) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, item);
+        intent.setType("text/plain");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ReadableRedditApp.getAppContext().startActivity(intent);
     }
 }

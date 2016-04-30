@@ -1,6 +1,7 @@
 package com.example.onlinetyari.readablereddit;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.onlinetyari.readablereddit.api.RedditAPI;
 
@@ -9,10 +10,19 @@ import com.example.onlinetyari.readablereddit.api.RedditAPI;
  */
 public class ReadableRedditApp extends Application {
 
+    private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        RedditAPI redditAPI = new RedditAPI();
+        RedditAPI.setupRedditAPI();
 
+        context = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return context;
     }
 }

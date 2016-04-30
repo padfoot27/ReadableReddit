@@ -3,4 +3,18 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="primary_text_material_light">#fafafa</color>
+    <color name="windowBackgroundReddit">#ffffff</color>
+    <color name="colorPrimaryReddit">#212121</color>
+    <color name="colorPrimaryDarkReddit">#424242</color>
+    <color name="colorAccentReddit">#F5F5F5</color>
+    <color name="textColorPrimaryReddit">#F5F5F5</color>
+    <color name="textColorPrimaryInverseReddit">#fafafa</color>
+    <color name="textColorSecondaryReddit">#999999</color>
+    <color name="textColorSecondaryInverseReddit">#666666</color>
+    <color name="primary_material_dark">#424242</color>
+    <color name="primary_dark_material_dark">#212121</color>
+    <color name="accent_material_dark">#f5f5f5</color>
+    <color name="background_material_dark">#fafafa</color>
+    <color name="primary_text_material_dark">#212121</color>
 </resources>

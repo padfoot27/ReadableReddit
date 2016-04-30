@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
-            android:title="First" />
+            android:id="@+id/science"
+            android:title="@string/science" />
         <item
-            android:id="@+id/nav_second_fragment"
-            android:title="Second" />
+            android:id="@+id/pics"
+            android:title="@string/pics" />
         <item
-            android:id="@+id/nav_third_fragment"
-            android:title="Third" />
+            android:id="@+id/ask_redddit"
+            android:title="@string/ask_reddit" />
     </group>
 </menu>

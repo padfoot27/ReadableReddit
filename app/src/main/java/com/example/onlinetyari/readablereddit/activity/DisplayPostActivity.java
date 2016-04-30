@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
 import com.example.onlinetyari.readablereddit.R;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 public class DisplayPostActivity extends AppCompatActivity {
 
@@ -26,11 +25,9 @@ public class DisplayPostActivity extends AppCompatActivity {
         String url = intent.getStringExtra(IntentConstants.DISPLAY_IMAGE);
 
         TextView textView = (TextView) findViewById(R.id.title_display);
-        SimpleDraweeView simpleDraweeView = (SimpleDraweeView) findViewById(R.id.my_image_view);
 
         textView.setText(title);
         Uri uri = Uri.parse(url);
-        simpleDraweeView.setImageURI(uri);
     }
 
 }
