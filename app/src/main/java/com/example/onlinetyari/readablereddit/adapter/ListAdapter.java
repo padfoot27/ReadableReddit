@@ -1,13 +1,9 @@
 package com.example.onlinetyari.readablereddit.adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
-import android.support.annotation.RequiresPermission;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +22,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import rx.functions.Action1;
 
 
 /**
@@ -51,11 +45,15 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String PNG = "png";
     public static final String GIF = "gif";
     public static final String GIFV = "gifv";
+    private static final int visibleThreshold = 5;
 
-    public ListAdapter(List<PostData> posts, Resources resources, Context context) {
+    private EndlessScrollListener endlessScrollListener;
+
+    public ListAdapter(List<PostData> posts, Resources resources, Context context, EndlessScrollListener endlessScrollListener) {
         this.mPosts = posts;
         this.resources = resources;
         this.context = context;
+        this.endlessScrollListener = endlessScrollListener;
     }
 
     private static OnItemClickListener onItemClickListener;
@@ -120,6 +118,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             default : configureTitleViewHolder((ViewHolderTitle) holder, position);
                       break;
+        }
+
+        if (position == getItemCount() - visibleThreshold) {
+            if (endlessScrollListener != null) {
+                endlessScrollListener.onLoadMore(position);
+            }
         }
     }
 
@@ -205,6 +209,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void configureTitleViewHolder(ViewHolderTitle viewHolderTitle, int position) {
 
+
         viewHolderTitle.textView.setText(mPosts.get(position).getTitle());
         viewHolderTitle.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
         viewHolderTitle.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
@@ -284,5 +289,15 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addItem(PostData postData) {
         mPosts.add(0, postData);
         notifyItemChanged(0);
+    }
+
+    public void clear() {
+        mPosts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<PostData> postDataList) {
+        mPosts.addAll(postDataList);
+        notifyDataSetChanged();
     }
 }

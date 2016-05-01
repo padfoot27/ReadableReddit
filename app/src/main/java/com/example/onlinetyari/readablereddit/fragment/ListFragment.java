@@ -1,7 +1,6 @@
 package com.example.onlinetyari.readablereddit.fragment;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -14,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
-import com.example.onlinetyari.readablereddit.ReadableRedditApp;
+import com.example.onlinetyari.readablereddit.adapter.EndlessScrollListener;
 import com.example.onlinetyari.readablereddit.api.RedditAPI;
 import com.example.onlinetyari.readablereddit.database.PostsDatabaseHelper;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
@@ -30,7 +31,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -39,7 +39,12 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListFragment extends Fragment implements ListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
+public class ListFragment extends Fragment implements
+        ListAdapter.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        EndlessScrollListener
+
+{
 
     private String title;
     private Integer page;
@@ -52,6 +57,8 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
     public CompositeSubscription compositeSubscription;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String url;
+    public RelativeLayout relativeLayoutProgress;
+    public ProgressBar progressBar;
 
     public static ListFragment newInstance(String title, Integer page) {
         ListFragment listFragment = new ListFragment();
@@ -88,8 +95,9 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+        relativeLayoutProgress = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         postList = (RecyclerView) view.findViewById(R.id.post_list);
-        listAdapter = new ListAdapter(new ArrayList<>(), resources, context);
+        listAdapter = new ListAdapter(new ArrayList<>(), resources, context, this);
         listAdapter.setOnItemClickListener(this);
         postList.setAdapter(listAdapter);
         postList.setLayoutManager(new LinearLayoutManager(context));
@@ -115,7 +123,7 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                       section = "rising";
         }
 
-        Observable<List<PostData>> network = RedditAPI.redditRetroService.getData(url, null, null, null)
+        Observable<List<PostData>> network = RedditAPI.redditRetroService.getData(url, null, null, null, 1)
                             .map(initialData -> initialData.data.children)
                             .flatMap(Observable::from)
                             .map(post -> post.data)
@@ -135,7 +143,10 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                     Log.v("postData", postData.getUrl());
                     PostsDatabaseHelper.getInstance(context).addPost(postData, section);
                 })
-                        .doOnCompleted(() -> Log.v("abc", "completed"))
+                        .doOnCompleted(() -> {
+                            Log.v("abc", url);
+                            relativeLayoutProgress.setVisibility(View.GONE);
+                        })
                         .doOnError(throwable -> Log.v("Error", "Data subscription"))
                 .subscribe(postData1 -> {
                     if (!listAdapter.mPosts.contains(postData1)) {
@@ -167,7 +178,29 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
     public void onRefresh() {
 
         String before = listAdapter.mPosts.get(0).getName();
-        Subscription subscription = RedditAPI.redditRetroService.getData(url, before, null, null)
+        Subscription subscription = RedditAPI.redditRetroService.getData(url, before, null, null, 1)
+                .map(initialData -> initialData.data.children)
+                .flatMap(Observable::from)
+                .map(post -> post.data)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .doOnError(throwable -> Log.v("error", "error"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(postDataList -> {
+                    postDataList.addAll(listAdapter.mPosts);
+                    listAdapter.clear();
+                    listAdapter.addAll(postDataList);
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+        compositeSubscription.add(subscription);
+    }
+
+    @Override
+    public void onLoadMore(int position) {
+
+        String after = listAdapter.mPosts.get(listAdapter.mPosts.size() - 1).getName();
+
+        Subscription subscription = RedditAPI.redditRetroService.getData(url, null, after, null, 1)
                 .map(initialData -> initialData.data.children)
                 .flatMap(Observable::from)
                 .map(post -> post.data)
@@ -176,10 +209,9 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                 .doOnError(throwable -> Log.v("error", "error"))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(postDataList1 -> {
-                    for (PostData postData : postDataList1) {
-                        listAdapter.addItem(postData);
-                    }
-                    swipeRefreshLayout.setRefreshing(false);
+                    listAdapter.addAll(postDataList1);
+                    int currentSize = listAdapter.getItemCount();
+                    listAdapter.notifyItemRangeInserted(currentSize, postDataList1.size() - 1);
                 });
         compositeSubscription.add(subscription);
     }

@@ -12,7 +12,11 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.onlinetyari.readablereddit.R;
+import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
+import com.jakewharton.rxbinding.view.RxView;
+
+import rx.functions.Action1;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class WebViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setBackgroundColor(getResources().getColor(R.color.fab));
 
         webView = (WebView) findViewById(R.id.webview);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -35,9 +40,16 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
-        webView.loadUrl(intent.getStringExtra(IntentConstants.URL));
-    }
+        String url = intent.getStringExtra(IntentConstants.URL);
 
+        RxView.clicks(fab)
+                .subscribe(aVoid -> {
+                    shareFunction(url);
+                });
+
+        setTitle("Readable Reddit");
+        webView.loadUrl(url);
+    }
 
     public class RedditClient extends WebViewClient {
 
@@ -55,5 +67,14 @@ public class WebViewActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+    public void shareFunction(String link) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, link);
+        intent.setType("text/plain");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ReadableRedditApp.getAppContext().startActivity(intent);
     }
 }

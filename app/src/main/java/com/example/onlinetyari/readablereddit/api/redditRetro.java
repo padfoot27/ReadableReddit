@@ -20,5 +20,6 @@ public interface redditRetro {
             @Url String url,
             @Query(APIConstants.before) String before,
             @Query(APIConstants.after) String after,
-            @Query(APIConstants.limit) Integer limit);
+            @Query(APIConstants.limit) Integer limit,
+            @Query(APIConstants.RAW_JSON) Integer raw_json);
 }

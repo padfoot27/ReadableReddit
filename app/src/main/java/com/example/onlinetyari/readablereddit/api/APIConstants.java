@@ -8,4 +8,5 @@ public class APIConstants {
     public static final String before = "before";
     public static final String after = "after";
     public static final String limit = "limit";
+    public static final String RAW_JSON = "raw_json";
 }

@@ -17,4 +17,5 @@
     <color name="accent_material_dark">#f5f5f5</color>
     <color name="background_material_dark">#fafafa</color>
     <color name="primary_text_material_dark">#212121</color>
+    <color name="fab">#FAFAFA</color>
 </resources>

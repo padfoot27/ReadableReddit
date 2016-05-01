@@ -104,6 +104,7 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(FragmentConstants.ASK_REDDIT.substring(0, 1).toUpperCase() + FragmentConstants.ASK_REDDIT.substring(1));
                 break;
 
             case R.id.pics :
@@ -112,6 +113,7 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(FragmentConstants.PICS.substring(0, 1).toUpperCase() + FragmentConstants.PICS.substring(1));
                 break;
 
             case R.id.science :
@@ -120,6 +122,7 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(FragmentConstants.SCIENCE.substring(0, 1).toUpperCase() + FragmentConstants.SCIENCE.substring(1));
                 break;
         }
     }
