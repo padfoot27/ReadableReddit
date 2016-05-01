@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
-    android:weightSum="1">
+    android:background="#FAFAFA">
 
     <include layout="@layout/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.11" />
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:paddingLeft="5dp"
         android:layout_height="wrap_content"
         android:autoLink="all"
-        android:textColorLink="#8DE67F"
+        android:layout_below="@id/textView"
+        android:textColor="#757575"
+        android:textColorLink="#0099FF"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewText"
-        android:layout_marginBottom="10dp"
-        android:maxLines="4"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.38" />
+        android:layout_marginBottom="10dp"/>
 
     <include layout="@layout/comment_score_share"
+        android:layout_below="@id/textViewText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

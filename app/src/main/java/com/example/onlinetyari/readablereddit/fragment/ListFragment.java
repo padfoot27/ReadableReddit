@@ -1,11 +1,13 @@
 package com.example.onlinetyari.readablereddit.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,7 +39,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListFragment extends Fragment implements ListAdapter.OnItemClickListener{
+public class ListFragment extends Fragment implements ListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private String title;
     private Integer page;
@@ -48,6 +50,8 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
     public Context context;
     public Resources resources;
     public CompositeSubscription compositeSubscription;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private String url;
 
     public static ListFragment newInstance(String title, Integer page) {
         ListFragment listFragment = new ListFragment();
@@ -85,14 +89,14 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         postList = (RecyclerView) view.findViewById(R.id.post_list);
-        listAdapter = new ListAdapter(new ArrayList<>(), resources);
+        listAdapter = new ListAdapter(new ArrayList<>(), resources, context);
         listAdapter.setOnItemClickListener(this);
         postList.setAdapter(listAdapter);
         postList.setLayoutManager(new LinearLayoutManager(context));
-
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         postDataList = new ArrayList<>();
 
-        String url;
         String section;
 
         switch (page) {
@@ -111,7 +115,7 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
                       section = "rising";
         }
 
-        Observable<List<PostData>> network = RedditAPI.redditRetroService.getData(url)
+        Observable<List<PostData>> network = RedditAPI.redditRetroService.getData(url, null, null, null)
                             .map(initialData -> initialData.data.children)
                             .flatMap(Observable::from)
                             .map(post -> post.data)
@@ -157,5 +161,26 @@ public class ListFragment extends Fragment implements ListAdapter.OnItemClickLis
     public void onDestroy() {
         super.onDestroy();
         compositeSubscription.unsubscribe();
+    }
+
+    @Override
+    public void onRefresh() {
+
+        String before = listAdapter.mPosts.get(0).getName();
+        Subscription subscription = RedditAPI.redditRetroService.getData(url, before, null, null)
+                .map(initialData -> initialData.data.children)
+                .flatMap(Observable::from)
+                .map(post -> post.data)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .doOnError(throwable -> Log.v("error", "error"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(postDataList1 -> {
+                    for (PostData postData : postDataList1) {
+                        listAdapter.addItem(postData);
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+        compositeSubscription.add(subscription);
     }
 }

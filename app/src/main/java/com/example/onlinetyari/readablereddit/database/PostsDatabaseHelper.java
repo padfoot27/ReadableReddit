@@ -21,11 +21,12 @@ import rx.Observable;
 public class PostsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "postsDatabase";
-    private static final Integer DATABASE_VERSION = 4;
+    private static final Integer DATABASE_VERSION = 5;
 
     private static final String TABLE_POSTS = "posts";
 
     private static final String KEY_POST_ID = "id";
+    private static final String KEY_POST_NAME = "name";
     private static final String KEY_POST_TITLE = "title";
     private static final String KEY_URL = "url";
     private static final String KEY_SCORE = "score";
@@ -56,7 +57,8 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
                 KEY_URL + " TEXT," +
                 KEY_SCORE + " INTEGER," +
                 KEY_COMMENTS + " INTEGER, " +
-                KEY_SECTION + " TEXT" +
+                KEY_SECTION + " TEXT, " +
+                KEY_POST_NAME + " TEXT" +
                 ")";
 
         Log.v("c", CREATE_TABLE);
@@ -87,6 +89,7 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(KEY_SCORE, postData.score);
             contentValues.put(KEY_COMMENTS, postData.num_comments);
             contentValues.put(KEY_SECTION, section);
+            contentValues.put(KEY_POST_NAME, postData.getName());
 
             String selectQuery = String.format("SELECT %s FROM %s WHERE %s = ? AND %s = ?", KEY_POST_TITLE, TABLE_POSTS, KEY_POST_TITLE, KEY_SECTION);
 

@@ -8,4 +8,6 @@ public class IntentConstants {
     public static final String DISPLAY_TITLE = "title";
     public static final String DISPLAY_IMAGE = "image";
     public static final String DISPLAY_PAGE = "page";
+
+    public static final String URL = "url";
 }

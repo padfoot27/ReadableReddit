@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.onlinetyari.readablereddit">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".ReadableRedditApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher_reddit"
         android:label="@string/app_name"
-        android:name=".ReadableRedditApp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -37,6 +38,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DisplayPostActivity" />
+        </activity>
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:parentActivityName=".activity.ListActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.onlinetyari.readablereddit.activity.ListActivity" />
         </activity>
     </application>
 

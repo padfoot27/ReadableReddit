@@ -12,8 +12,10 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="reddit">Reddit</string>
 
     <string name="science">Science</string>
     <string name="pics">Pics</string>
     <string name="ask_reddit">AskReddit</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
 </resources>

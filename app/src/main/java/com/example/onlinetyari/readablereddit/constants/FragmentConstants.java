@@ -17,4 +17,5 @@ public class FragmentConstants {
     public static final String NEWS = "news";
     public static final String ASK_REDDIT = "askreddit";
 
+
 }
