@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.ReadableRedditApp;
@@ -21,7 +21,7 @@ import rx.functions.Action1;
 public class WebViewActivity extends AppCompatActivity {
 
     private WebView webView;
-    private ProgressBar progressBar;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +34,14 @@ public class WebViewActivity extends AppCompatActivity {
         fab.setBackgroundColor(getResources().getColor(R.color.fab));
 
         webView = (WebView) findViewById(R.id.webview);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        textView = (TextView) findViewById(R.id.url);
 
         webView.setWebViewClient(new RedditClient());
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
         String url = intent.getStringExtra(IntentConstants.URL);
-
+        textView.setText(url);
         RxView.clicks(fab)
                 .subscribe(aVoid -> {
                     shareFunction(url);
@@ -56,7 +56,6 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            progressBar.setVisibility(View.VISIBLE);
             view.loadUrl(url);
             return true;
         }
@@ -65,7 +64,6 @@ public class WebViewActivity extends AppCompatActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
-            progressBar.setVisibility(View.GONE);
         }
     }
 

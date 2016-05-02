@@ -10,15 +10,14 @@
     tools:context="com.example.onlinetyari.readablereddit.activity.WebViewActivity"
     tools:showIn="@layout/activity_web_view">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
+    <TextView
+        android:id="@+id/url"
+        android:textColor="#757575"
         android:layout_width="match_parent"
-        android:layout_marginBottom="2dp"
-        android:layout_height="1dp" />
-
+        android:layout_height="wrap_content" />
     <WebView
         android:id="@+id/webview"
-        android:layout_below="@id/progress_bar"
+        android:layout_below="@id/url"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

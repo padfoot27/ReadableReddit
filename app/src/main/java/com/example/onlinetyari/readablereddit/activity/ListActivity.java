@@ -45,14 +45,14 @@ public class ListActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.vpPager);
         viewPager.setOffscreenPageLimit(2);
         ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-        listTabbedFragment.setSubReddit(FragmentConstants.SCIENCE);
+        listTabbedFragment.setSubReddit(FragmentConstants.PICS);
+        setTitle("Pics");
         viewPager.setAdapter(listTabbedFragment);
         viewPager.setCurrentItem(1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,6 +84,11 @@ public class ListActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 item -> {
@@ -104,7 +109,7 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(FragmentConstants.ASK_REDDIT.substring(0, 1).toUpperCase() + FragmentConstants.ASK_REDDIT.substring(1));
+                setTitle(R.string.ask_reddit);
                 break;
 
             case R.id.pics :
@@ -113,7 +118,107 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(FragmentConstants.PICS.substring(0, 1).toUpperCase() + FragmentConstants.PICS.substring(1));
+                setTitle(R.string.pics);
+                break;
+
+            case R.id.todayilearned :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.TODAY_I_LEARNED);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.todayilearned);
+                break;
+
+            case R.id.dataisbeautiful :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.DATA_IS_BEAUTIFUL);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.dataisbeautiful);
+                break;
+
+            case R.id.funny :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.FUNNY);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.funny);
+                break;
+
+            case R.id.movies :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.MOVIES);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.movies);
+                break;
+
+            case R.id.music :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.MUSIC);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.music);
+                break;
+
+            case R.id.philosphy :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.PHILOSOPHY);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.philosphy);
+                break;
+
+
+            case R.id.showerthoughts :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.SHOWER_THOUGHTS);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.showerthoughts);
+                break;
+
+            case R.id.tifu :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.TIFU);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.tifu);
+                break;
+
+            case R.id.aww :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.AWW);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.aww);
+                break;
+
+            case R.id.explainlikeimfive :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.EXPLAINLIKEIMFIVE);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.explainlikeimfive);
+                break;
+
+            case R.id.books :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.BOOKS);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.books);
                 break;
 
             case R.id.science :
@@ -122,7 +227,7 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setAdapter(listTabbedFragment);
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(FragmentConstants.SCIENCE.substring(0, 1).toUpperCase() + FragmentConstants.SCIENCE.substring(1));
+                setTitle(R.string.science);
                 break;
         }
     }

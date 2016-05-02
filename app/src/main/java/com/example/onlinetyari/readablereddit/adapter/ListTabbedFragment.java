@@ -17,7 +17,7 @@ public class ListTabbedFragment extends FragmentStatePagerAdapter {
     public String subReddit;
 
     private static Integer NUM_ITEMS = 3;
-    String[] tabTitles = new String[] {FragmentConstants.HOT, FragmentConstants.RISING, FragmentConstants.NEW};
+    String[] tabTitles = new String[] {FragmentConstants.HOT, FragmentConstants.TOP, FragmentConstants.NEW};
 
     public ListTabbedFragment(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -38,7 +38,7 @@ public class ListTabbedFragment extends FragmentStatePagerAdapter {
                      fragment.setSubReddit(subReddit);
                      return fragment;
 
-            case 1 : fragment = ListFragment.newInstance(FragmentConstants.RISING, 1);
+            case 1 : fragment = ListFragment.newInstance(FragmentConstants.TOP, 1);
                      fragment.setSubReddit(subReddit);
                      return fragment;
 
@@ -46,7 +46,7 @@ public class ListTabbedFragment extends FragmentStatePagerAdapter {
                      fragment.setSubReddit(subReddit);
                      return fragment;
 
-            default : fragment = ListFragment.newInstance(FragmentConstants.RISING, 1);
+            default : fragment = ListFragment.newInstance(FragmentConstants.TOP, 1);
                       fragment.setSubReddit(subReddit);
                       return fragment;
         }

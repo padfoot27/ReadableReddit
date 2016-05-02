@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.activity.WebViewActivity;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
+import com.example.onlinetyari.readablereddit.pojo.Source;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.net.URL;
@@ -34,8 +36,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     public static final int TEXT = 0;
     public static final int TITLE = 1;
-    public static final int IMAGE_GIF = 2;
-    public static final int LINK = 3;
+    public static final int IMAGE = 2;
+    public static final int GIF_ = 3;
+    public static final int LINK = 4;
     public static final String IMGUR_HOST_IMAGE = "i.imgur.com";
     public static final String IMGUR_HOST_IMAGE_MOBILE = "m.imgur.com";
     public static final String IMGUR_HOST_ALBUM = "a";
@@ -46,6 +49,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String GIF = "gif";
     public static final String GIFV = "gifv";
     private static final int visibleThreshold = 5;
+    private static final int optimumResolution = 640 * 480;
 
     private EndlessScrollListener endlessScrollListener;
 
@@ -83,12 +87,16 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                          viewHolder = new ViewHolderTitle(v2);
                          break;
 
-            case IMAGE_GIF : View v3 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
+            case IMAGE : View v3 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
                              viewHolder = new ViewHolderImageGIF(v3);
                              break;
 
-            case LINK : View v4 = inflater.inflate(R.layout.layout_viewholder_link, parent, false);
-                        viewHolder = new ViewHolderLink(v4);
+            case GIF_ : View v4 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
+                       viewHolder = new ViewHolderImageGIF(v4);
+                       break;
+
+            case LINK : View v5 = inflater.inflate(R.layout.layout_viewholder_link_new, parent, false);
+                        viewHolder = new ViewHolderLinkNew(v5);
                         break;
 
             default : View v = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
@@ -110,10 +118,13 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TITLE : configureTitleViewHolder((ViewHolderTitle) holder, position);
                          break;
 
-            case IMAGE_GIF : configureTextViewImageGIF((ViewHolderImageGIF) holder, position);
+            case IMAGE : configureTextViewImageGIF((ViewHolderImageGIF) holder, position, IMAGE);
                              break;
 
-            case LINK : configureLinkViewHolder((ViewHolderLink) holder, position);
+            case GIF_ : configureTextViewImageGIF((ViewHolderImageGIF) holder, position, GIF_);
+                        break;
+
+            case LINK : configureLinkViewNewHolder((ViewHolderLinkNew) holder, position);
                         break;
 
             default : configureTitleViewHolder((ViewHolderTitle) holder, position);
@@ -146,9 +157,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         String[] splitString = mPosts.get(position).getUrl().split(Pattern.quote("."));
 
-        if (Arrays.asList(splitString).contains(JPG) || Arrays.asList(splitString).contains(PNG) ||
-                Arrays.asList(splitString).contains(GIF) || Arrays.asList(splitString).contains(GIFV)) {
-            return IMAGE_GIF;
+        if (Arrays.asList(splitString).contains(JPG) || Arrays.asList(splitString).contains(PNG)) {
+            return IMAGE;
+        }
+
+        if (Arrays.asList(splitString).contains(GIF) || Arrays.asList(splitString).contains(GIFV)){
+            return GIF_;
         }
 
         if (url != null) {
@@ -178,7 +192,11 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         else if (image_gif){
 
-            return IMAGE_GIF;
+            return IMAGE;
+        }
+
+        else if (mPosts.get(position).preview != null) {
+            return LINK;
         }
 
         else {
@@ -242,18 +260,30 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
     }
 
-    public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position) {
-
+    public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position, int type) {
 
         viewHolderImageGIF.textView.setText(mPosts.get(position).getTitle());
 
-        Glide
-                .with(ReadableRedditApp.getAppContext())
-                .load(mPosts.get(position).getUrl())
-                .placeholder(R.drawable.placeholder)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(viewHolderImageGIF.image_gif);
+        if (type == IMAGE) {
+
+            String url = mPosts.get(position).getUrl();
+            Glide
+                    .with(ReadableRedditApp.getAppContext())
+                    .load(url)
+                    .placeholder(R.drawable.placeholder)
+                    .crossFade()
+                    .into(viewHolderImageGIF.image_gif);
+        }
+
+        else {
+            Glide
+                    .with(ReadableRedditApp.getAppContext())
+                    .load(mPosts.get(position).getUrl())
+                    .asGif()
+                    .placeholder(R.drawable.placeholder)
+                    .crossFade()
+                    .into(viewHolderImageGIF.image_gif);
+        }
 
         viewHolderImageGIF.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
         viewHolderImageGIF.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
@@ -264,6 +294,60 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
 
         RxView.clicks(viewHolderImageGIF.textView)
+                .subscribe(aVoid -> {
+                    startWebViewActivity(mPosts.get(position).getUrl());
+                });
+    }
+
+    public void configureLinkViewNewHolder(ViewHolderLinkNew viewHolderLinkNew, int position) {
+        viewHolderLinkNew.textView.setText(mPosts.get(position).getTitle());
+
+        String imageURL = null;
+        URL url = null;
+
+        try {
+            url = new URL(mPosts.get(position).getUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            List<Source> sourceList = mPosts.get(position).preview.images.get(0).resolutions;
+            imageURL = sourceList.get(sourceList.size() - 1).url;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (imageURL != null) {
+            Glide
+                    .with(ReadableRedditApp.getAppContext())
+                    .load(imageURL)
+                    .placeholder(R.drawable.placeholder)
+                    .crossFade()
+                    .into(viewHolderLinkNew.image_gif);
+        }
+
+        else viewHolderLinkNew.image_gif.setVisibility(View.GONE);
+
+        if (url == null) {
+            viewHolderLinkNew.link.setVisibility(View.GONE);
+
+        }
+
+        viewHolderLinkNew.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
+        viewHolderLinkNew.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+
+        RxView.clicks(viewHolderLinkNew.share)
+                .subscribe(aVoid -> {
+                    shareFunction(mPosts.get(position).getTitle(), mPosts.get(position).getUrl());
+                });
+
+        RxView.clicks(viewHolderLinkNew.textView)
+                .subscribe(aVoid -> {
+                    startWebViewActivity(mPosts.get(position).getUrl());
+                });
+
+        RxView.clicks(viewHolderLinkNew.link)
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });

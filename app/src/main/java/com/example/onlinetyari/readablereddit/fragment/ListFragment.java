@@ -60,6 +60,8 @@ public class ListFragment extends Fragment implements
     public RelativeLayout relativeLayoutProgress;
     public ProgressBar progressBar;
 
+    public static final String BASE_URL = "https://api.reddit.com/r/";
+
     public static ListFragment newInstance(String title, Integer page) {
         ListFragment listFragment = new ListFragment();
         Bundle bundle = new Bundle();
@@ -109,17 +111,17 @@ public class ListFragment extends Fragment implements
 
         switch (page) {
 
-            case 0 : url = "https://api.reddit.com/r/" + subReddit + "/hot.json";
+            case 0 : url = BASE_URL + subReddit + "/hot.json";
                      section = "hot";
                      break;
 
-            case 1 : url = "https://api.reddit.com/r/" + subReddit + "/rising.json";
+            case 1 : url = BASE_URL + subReddit + "/top.json";
                      section = "rising";
                      break;
-            case 2 : url = "https://api.reddit.com/r/" + subReddit + "/new.json";
+            case 2 : url = BASE_URL + subReddit + "/new.json";
                      section = "new";
                      break;
-            default : url = "https://api.reddit.com/r/" + subReddit + "/rising.json";
+            default : url = BASE_URL + subReddit + "/top.json";
                       section = "rising";
         }
 

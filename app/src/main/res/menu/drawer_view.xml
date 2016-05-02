@@ -2,14 +2,62 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/science"
-            android:title="@string/science" />
-        <item
-            android:id="@+id/pics"
-            android:title="@string/pics" />
+
         <item
             android:id="@+id/ask_redddit"
             android:title="@string/ask_reddit" />
+
+        <item
+            android:id="@+id/aww"
+            android:title="@string/aww" />
+
+        <item
+            android:id="@+id/books"
+            android:title="@string/books" />
+
+        <item
+            android:id="@+id/dataisbeautiful"
+            android:title="@string/dataisbeautiful" />
+
+        <item
+            android:id="@+id/explainlikeimfive"
+            android:title="@string/explainlikeimfive" />
+
+        <item
+            android:id="@+id/funny"
+            android:title="@string/funny" />
+
+        <item
+            android:id="@+id/movies"
+            android:title="@string/movies" />
+
+        <item
+            android:id="@+id/music"
+            android:title="@string/music" />
+
+        <item
+            android:id="@+id/philosphy"
+            android:title="@string/philosphy" />
+
+        <item
+            android:id="@+id/pics"
+            android:title="@string/pics" />
+
+        <item
+            android:id="@+id/science"
+            android:title="@string/science" />
+
+        <item
+            android:id="@+id/showerthoughts"
+            android:title="@string/showerthoughts" />
+
+        <item
+            android:id="@+id/tifu"
+            android:title="@string/tifu" />
+
+        <item
+            android:id="@+id/todayilearned"
+            android:title="@string/todayilearned" />
+
     </group>
 </menu>
