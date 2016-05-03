@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.example.onlinetyari.readablereddit.adapter.EndlessScrollListener;
 import com.example.onlinetyari.readablereddit.api.RedditAPI;
+import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
 import com.example.onlinetyari.readablereddit.database.PostsDatabaseHelper;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
 import com.example.onlinetyari.readablereddit.R;
@@ -60,7 +61,9 @@ public class ListFragment extends Fragment implements
     public RelativeLayout relativeLayoutProgress;
     public ProgressBar progressBar;
 
+
     public static final String BASE_URL = "https://api.reddit.com/r/";
+    public static final String BASE_URL_MAIN = "https://api.reddit.com";
 
     public static ListFragment newInstance(String title, Integer page) {
         ListFragment listFragment = new ListFragment();
@@ -109,20 +112,44 @@ public class ListFragment extends Fragment implements
 
         String section;
 
-        switch (page) {
+        if (subReddit.equals(FragmentConstants.FRONT_PAGE)) {
 
-            case 0 : url = BASE_URL + subReddit + "/hot.json";
-                     section = "hot";
-                     break;
+            switch (page) {
 
-            case 1 : url = BASE_URL + subReddit + "/top.json";
-                     section = "rising";
-                     break;
-            case 2 : url = BASE_URL + subReddit + "/new.json";
-                     section = "new";
-                     break;
-            default : url = BASE_URL + subReddit + "/top.json";
-                      section = "rising";
+                case 0 : url = BASE_URL_MAIN + "/hot.json";
+                    section = "hot";
+                    break;
+
+                case 1 : url = BASE_URL_MAIN + "/top.json";
+                    section = "rising";
+                    break;
+                case 2 : url = BASE_URL_MAIN +  "/new.json";
+                    section = "new";
+                    break;
+                default : url = BASE_URL_MAIN + "/top.json";
+                    section = "rising";
+            }
+        }
+        else {
+            switch (page) {
+
+                case 0:
+                    url = BASE_URL + subReddit + "/hot.json";
+                    section = "hot";
+                    break;
+
+                case 1:
+                    url = BASE_URL + subReddit + "/top.json";
+                    section = "rising";
+                    break;
+                case 2:
+                    url = BASE_URL + subReddit + "/new.json";
+                    section = "new";
+                    break;
+                default:
+                    url = BASE_URL + subReddit + "/top.json";
+                    section = "rising";
+            }
         }
 
         Observable<List<PostData>> network = RedditAPI.redditRetroService.getData(url, null, null, null, 1)
@@ -136,11 +163,12 @@ public class ListFragment extends Fragment implements
 
         Observable<List<PostData>> source = Observable
                 .concat(disk, network)
-                .first();
+                .first()
+                .take(25);
 
         Subscription subscription =
                 network.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).flatMap(Observable::from)
+                .observeOn(AndroidSchedulers.mainThread()).flatMap(Observable::from).take(25)
                 .doOnNext(postData -> {
                     Log.v("postData", postData.getUrl());
                     PostsDatabaseHelper.getInstance(context).addPost(postData, section);

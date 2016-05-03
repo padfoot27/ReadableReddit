@@ -1,6 +1,7 @@
 package com.example.onlinetyari.readablereddit.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -9,8 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.example.onlinetyari.readablereddit.adapter.ListTabbedFragment;
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
@@ -25,6 +29,8 @@ public class ListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private ViewPager viewPager;
+
+    private static final String FRONT_PAGE = "Front Page";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +51,8 @@ public class ListActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.vpPager);
         viewPager.setOffscreenPageLimit(2);
         ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-        listTabbedFragment.setSubReddit(FragmentConstants.PICS);
-        setTitle("Pics");
+        listTabbedFragment.setSubReddit(FragmentConstants.FRONT_PAGE);
+        setTitle(FRONT_PAGE);
         viewPager.setAdapter(listTabbedFragment);
         viewPager.setCurrentItem(1);
 
@@ -82,11 +88,6 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -228,6 +229,15 @@ public class ListActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(1);
                 mDrawer.closeDrawer(GravityCompat.START);
                 setTitle(R.string.science);
+                break;
+
+            case R.id.front_page :
+                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+                listTabbedFragment.setSubReddit(FragmentConstants.FRONT_PAGE);
+                viewPager.setAdapter(listTabbedFragment);
+                viewPager.setCurrentItem(1);
+                mDrawer.closeDrawer(GravityCompat.START);
+                setTitle(R.string.front_page);
                 break;
 
         }

@@ -29,6 +29,7 @@
     <string name="showerthoughts">Shower Thoughts</string>
     <string name="tifu">Today I Fucked Up</string>
     <string name="gif">GIFs</string>
+    <string name="front_page">Front Page</string>
 
     <string name="title_activity_web_view">WebViewActivity</string>
 

@@ -24,6 +24,10 @@
             android:title="@string/explainlikeimfive" />
 
         <item
+            android:id="@+id/front_page"
+            android:title="@string/front_page" />
+
+        <item
             android:id="@+id/funny"
             android:title="@string/funny" />
 

@@ -27,4 +27,5 @@ public class FragmentConstants {
     public static final String FUNNY = "funny";
     public static final String DATA_IS_BEAUTIFUL = "dataisbeautiful";
     public static final String TODAY_I_LEARNED = "todayilearned";
+    public static final String FRONT_PAGE = "";
  }

@@ -28,5 +28,4 @@ public class DisplatCommentsActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }
