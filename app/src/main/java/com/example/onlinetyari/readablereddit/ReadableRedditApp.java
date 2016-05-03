@@ -15,7 +15,6 @@ public class ReadableRedditApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         RedditAPI redditAPI = new RedditAPI();
         RedditAPI.setupRedditAPI();
 

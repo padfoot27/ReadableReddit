@@ -12,7 +12,7 @@ public class FragmentConstants {
 
     // Subreddits
     public static final String PICS = "pics";
-    public static final String GIFS = "gif";
+    public static final String GIFS = "gifs";
     public static final String SCIENCE = "science";
     public static final String NEWS = "news";
     public static final String ASK_REDDIT = "askreddit";

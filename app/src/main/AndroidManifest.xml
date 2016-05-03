@@ -48,6 +48,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.onlinetyari.readablereddit.activity.ListActivity" />
         </activity>
+        <activity
+            android:name=".activity.GifActivity"
+            android:label="@string/title_activity_gif"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

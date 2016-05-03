@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.activity.WebViewActivity;
@@ -162,7 +164,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (Arrays.asList(splitString).contains(GIF) || Arrays.asList(splitString).contains(GIFV)){
-            return GIF_;
+            return LINK;
         }
 
         if (url != null) {
@@ -276,13 +278,13 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         else {
+            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(viewHolderImageGIF.image_gif);
+
             Glide
                     .with(ReadableRedditApp.getAppContext())
                     .load(mPosts.get(position).getUrl())
-                    .asGif()
-                    .placeholder(R.drawable.placeholder)
-                    .crossFade()
-                    .into(viewHolderImageGIF.image_gif);
+                    .error(R.drawable.drawer)
+                    .into(imageViewTarget);
         }
 
         viewHolderImageGIF.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));

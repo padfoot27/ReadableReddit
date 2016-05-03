@@ -28,8 +28,10 @@
     <string name="philosphy">Philosophy</string>
     <string name="showerthoughts">Shower Thoughts</string>
     <string name="tifu">Today I Fucked Up</string>
+    <string name="gif">GIFs</string>
 
     <string name="title_activity_web_view">WebViewActivity</string>
 
     <string name="load_more">Click to View More</string>
+    <string name="title_activity_gif">GifActivity</string>
 </resources>

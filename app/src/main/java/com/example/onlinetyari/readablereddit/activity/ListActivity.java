@@ -229,6 +229,7 @@ public class ListActivity extends AppCompatActivity {
                 mDrawer.closeDrawer(GravityCompat.START);
                 setTitle(R.string.science);
                 break;
+
         }
     }
 }
