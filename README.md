@@ -10,16 +10,16 @@
 
 ##### I have turned this,
 
-##### ![Reddit Original](https://drive.google.com/file/d/0Bz_meteDnCQVN0oxQmFKdjd0Qzg/view?usp=sharing)
+##### ![Reddit Original](http://imgur.com/DWL52GD.jpg)
 
-##### ![Reddit Original](https://drive.google.com/file/d/0Bz_meteDnCQVaVNDT1hfNW5haEE/view?usp=sharing)
+##### ![Reddit Original](http://imgur.com/fep1ww9.jpg)
 
 ##### to this,
 
-##### ![Readable Reddit](https://drive.google.com/file/d/0Bz_meteDnCQVV1o1WXhfdzhZX0U/view?usp=sharing)
+##### ![Readable Reddit](http://imgur.com/oNB57Gz.jpg)
 
-##### ![Readable Reddit](https://drive.google.com/file/d/0Bz_meteDnCQVdGxqY0ZEaUVGeU0/view?usp=sharing)
+##### ![Readable Reddit](http://imgur.com/skzNr5O.jpg)
 
-##### ![Readable Reddit](https://drive.google.com/file/d/0Bz_meteDnCQVZXJNSi1hWndmems/view?usp=sharing)
+##### ![Readable Reddit](http://imgur.com/1f1pJdZ.jpg)
 
 ###### P.S. - All contributions are welcome :)
