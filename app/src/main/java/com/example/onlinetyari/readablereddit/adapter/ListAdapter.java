@@ -16,8 +16,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.ReadableRedditApp;
+import com.example.onlinetyari.readablereddit.activity.DisplayCommentsActivity;
+import com.example.onlinetyari.readablereddit.activity.DisplayPostActivity;
 import com.example.onlinetyari.readablereddit.activity.WebViewActivity;
+import com.example.onlinetyari.readablereddit.api.RedditAPI;
+import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
+import com.example.onlinetyari.readablereddit.pojo.CommentData;
+import com.example.onlinetyari.readablereddit.pojo.InitialData;
+import com.example.onlinetyari.readablereddit.pojo.InitialDataComment;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
 import com.example.onlinetyari.readablereddit.pojo.Source;
 import com.jakewharton.rxbinding.view.RxView;
@@ -26,6 +33,12 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -36,6 +49,8 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<PostData> mPosts;
     private Resources resources;
     private Context context;
+    private String subReddit;
+
     public static final int TEXT = 0;
     public static final int TITLE = 1;
     public static final int IMAGE = 2;
@@ -55,11 +70,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private EndlessScrollListener endlessScrollListener;
 
-    public ListAdapter(List<PostData> posts, Resources resources, Context context, EndlessScrollListener endlessScrollListener) {
+    public ListAdapter(List<PostData> posts, Resources resources, Context context, String subReddit, EndlessScrollListener endlessScrollListener) {
         this.mPosts = posts;
         this.resources = resources;
         this.context = context;
         this.endlessScrollListener = endlessScrollListener;
+        this.subReddit = subReddit;
     }
 
     private static OnItemClickListener onItemClickListener;
@@ -225,6 +241,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });
+
+        RxView.clicks(viewHolderText.comments)
+                .subscribe(aVoid -> {
+                    startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                });
+
     }
 
     public void configureTitleViewHolder(ViewHolderTitle viewHolderTitle, int position) {
@@ -242,6 +264,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });
+
+        RxView.clicks(viewHolderTitle.comments)
+                .subscribe(aVoid -> {
+                    startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                });
+
     }
 
     public void configureLinkViewHolder(ViewHolderLink viewHolderLink, int position) {
@@ -260,6 +288,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });
+
+        RxView.clicks(viewHolderLink.comments)
+                .subscribe(aVoid -> {
+                    startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                });
+
     }
 
     public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position, int type) {
@@ -289,6 +323,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         viewHolderImageGIF.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
         viewHolderImageGIF.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        boolean toggleFilter = true;
+        RxView.clicks(viewHolderImageGIF.comments)
+                .subscribe(aVoid -> {
+                    startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                });
+
 
         RxView.clicks(viewHolderImageGIF.share)
                 .subscribe(aVoid -> {
@@ -299,6 +339,8 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });
+
+
     }
 
     public void configureLinkViewNewHolder(ViewHolderLinkNew viewHolderLinkNew, int position) {
@@ -353,6 +395,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startWebViewActivity(mPosts.get(position).getUrl());
                 });
+
+        RxView.clicks(viewHolderLinkNew.comments)
+                .subscribe(aVoid -> {
+                    startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                });
+
     }
 
     public void shareFunction(String title, String link) {
@@ -369,6 +417,14 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Activity parentActivity = (Activity) context;
         Intent intent = new Intent(parentActivity, WebViewActivity.class);
         intent.putExtra(IntentConstants.URL, url);
+        parentActivity.startActivity(intent);
+    }
+
+    public void startCommentActivity(String url, String subreddit) {
+        Activity parentActivity = (Activity) context;
+        Intent intent = new Intent(parentActivity, DisplayCommentsActivity.class);
+        intent.putExtra(IntentConstants.URL, url);
+        intent.putExtra(IntentConstants.SUB_REDDIT, subreddit);
         parentActivity.startActivity(intent);
     }
 

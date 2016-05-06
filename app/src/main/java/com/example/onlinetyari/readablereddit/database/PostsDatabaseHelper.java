@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.onlinetyari.readablereddit.pojo.Post;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
 
 import java.util.ArrayList;

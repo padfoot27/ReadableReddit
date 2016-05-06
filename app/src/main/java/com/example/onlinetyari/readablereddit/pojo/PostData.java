@@ -34,6 +34,9 @@ public class PostData {
     @Expose
     public ImagePreview preview;
 
+    @Expose
+    public String subreddit;
+
     public String getDomain() {
         return domain;
     }

@@ -102,7 +102,7 @@ public class ListFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         relativeLayoutProgress = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         postList = (RecyclerView) view.findViewById(R.id.post_list);
-        listAdapter = new ListAdapter(new ArrayList<>(), resources, context, this);
+        listAdapter = new ListAdapter(new ArrayList<>(), resources, context, subReddit, this);
         listAdapter.setOnItemClickListener(this);
         postList.setAdapter(listAdapter);
         postList.setLayoutManager(new LinearLayoutManager(context));

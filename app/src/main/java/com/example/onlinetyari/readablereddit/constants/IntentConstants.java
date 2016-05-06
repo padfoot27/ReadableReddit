@@ -10,4 +10,5 @@ public class IntentConstants {
     public static final String DISPLAY_PAGE = "page";
 
     public static final String URL = "url";
+    public static final String SUB_REDDIT = "sub_reddit";
 }

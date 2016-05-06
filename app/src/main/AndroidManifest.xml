@@ -31,15 +31,6 @@
                 android:value=".activity.ListActivity" />
         </activity>
         <activity
-            android:name=".activity.DisplatCommentsActivity"
-            android:label="@string/title_activity_displat_comments"
-            android:parentActivityName=".activity.DisplayPostActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DisplayPostActivity" />
-        </activity>
-        <activity
             android:name=".activity.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:parentActivityName=".activity.ListActivity"
@@ -51,7 +42,16 @@
         <activity
             android:name=".activity.GifActivity"
             android:label="@string/title_activity_gif"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.DisplayCommentsActivity"
+            android:label="@string/title_activity_display_comments"
+            android:parentActivityName=".activity.ListActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.onlinetyari.readablereddit.activity.ListActivity" />
+        </activity>
     </application>
 
 </manifest>

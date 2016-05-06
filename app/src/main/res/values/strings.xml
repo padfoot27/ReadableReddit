@@ -8,7 +8,16 @@
     <string name="title_activity_displat_comments">DisplatCommentsActivity</string>
     <string name="comments">%1$s Comments</string>
     <string name="score">Score %1$d</string>
+    <string name="subr">/r/%1s</string>
     <string name="share">Share</string>
+    <string name="replies">View Replies</string>
+    <string name="points">Points %1$d</string>
+    <string name="days">%1dd</string>
+    <string name="hours">%1dh</string>
+    <string name="minutes">%1dm</string>
+    <string name="seconds">%1ds</string>
+    <string name="now">Now</string>
+    <string name="commentTitle">Comments</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -35,4 +44,5 @@
 
     <string name="load_more">Click to View More</string>
     <string name="title_activity_gif">GifActivity</string>
+    <string name="title_activity_display_comments">DisplayCommentsActivity</string>
 </resources>
