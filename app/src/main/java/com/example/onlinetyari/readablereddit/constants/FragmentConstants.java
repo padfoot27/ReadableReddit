@@ -28,4 +28,18 @@ public class FragmentConstants {
     public static final String DATA_IS_BEAUTIFUL = "dataisbeautiful";
     public static final String TODAY_I_LEARNED = "todayilearned";
     public static final String FRONT_PAGE = "";
+    public static final String WORLD_NEWS = "worldnews";
+    public static final String AMA = "IAmA";
+    public static final String MILDLY_INTERESTING = "mildlyinteresting";
+    public static final String DOCUMENTARIES = "Documentaries";
+    public static final String DIY = "DIY";
+    public static final String LISTEN_TO_THIS = "listentothis";
+    public static final String PERSONAL_FINANCE = "personalfinance";
+    public static final String SPACE = "space";
+    public static final String WRITING_PROMPTS = "WritingPrompts";
+    public static final String ART = "Art";
+    public static final String TECHNOLOGY = "technology";
+    public static final String STARTUPS = "startups";
+
+    public static final String COMMENT = "comment";
  }

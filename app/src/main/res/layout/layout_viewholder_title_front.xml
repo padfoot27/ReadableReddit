@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,36 +8,37 @@
     android:layout_marginBottom="10dp"
     android:background="#FAFAFA">
 
-    <include layout="@layout/title_text"
+    <include layout="@layout/front_subreddit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_marginBottom="10dp" />
+        android:layout_alignParentTop="true"
+        android:id="@+id/front_sub"
+        android:layout_marginBottom="4dp" />
+
 
     <TextView
         android:layout_width="match_parent"
-        android:paddingLeft="5dp"
         android:layout_height="wrap_content"
-        android:autoLink="all"
-        android:layout_below="@id/textView"
-        android:textColor="#757575"
-        android:textColorLink="#0099FF"
+        android:textColor="#212121"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textViewText"
-        android:layout_marginBottom="10dp"/>
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:layout_below="@id/front_sub"
+        android:id="@+id/textView"
+        android:layout_marginBottom="10dp" />
 
-    <include layout="@layout/comment_score_share"
-        android:layout_below="@id/textViewText"
+    <include
         android:id="@+id/community"
+        layout="@layout/comment_score_share"
+        android:layout_below="@id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </include>
+        android:layout_height="wrap_content" />
 
     <include layout="@layout/line_separator"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/community" />
+
 
 </RelativeLayout>
 

@@ -4,6 +4,14 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/ama"
+            android:title="@string/ama" />
+
+        <item
+            android:id="@+id/art"
+            android:title="@string/art" />
+
+        <item
             android:id="@+id/ask_redddit"
             android:title="@string/ask_reddit" />
 
@@ -20,6 +28,14 @@
             android:title="@string/dataisbeautiful" />
 
         <item
+            android:id="@+id/diy"
+            android:title="@string/diy" />
+
+        <item
+            android:id="@+id/documentaries"
+            android:title="@string/documentaries" />
+
+        <item
             android:id="@+id/explainlikeimfive"
             android:title="@string/explainlikeimfive" />
 
@@ -32,12 +48,24 @@
             android:title="@string/funny" />
 
         <item
+            android:id="@+id/listen_to_this"
+            android:title="@string/listen_to_this" />
+
+        <item
+            android:id="@+id/mildly_interesting"
+            android:title="@string/mildly_interesting" />
+
+        <item
             android:id="@+id/movies"
             android:title="@string/movies" />
 
         <item
             android:id="@+id/music"
             android:title="@string/music" />
+
+        <item
+            android:id="@+id/personal_finance"
+            android:title="@string/personal_finance" />
 
         <item
             android:id="@+id/philosphy"
@@ -56,12 +84,32 @@
             android:title="@string/showerthoughts" />
 
         <item
+            android:id="@+id/space"
+            android:title="@string/space" />
+
+        <item
+            android:id="@+id/startups"
+            android:title="@string/startups" />
+
+        <item
+            android:id="@+id/technology"
+            android:title="@string/technology" />
+
+        <item
             android:id="@+id/tifu"
             android:title="@string/tifu" />
 
         <item
             android:id="@+id/todayilearned"
             android:title="@string/todayilearned" />
+
+        <item
+            android:id="@+id/world_news"
+            android:title="@string/world_news" />
+
+        <item
+            android:id="@+id/writing_prompts"
+            android:title="@string/writing_prompts" />
 
     </group>
 </menu>

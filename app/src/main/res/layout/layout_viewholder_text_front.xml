@@ -6,9 +6,18 @@
     android:layout_marginBottom="10dp"
     android:background="#FAFAFA">
 
+    <include layout="@layout/front_subreddit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/front_sub"
+        android:layout_marginBottom="4dp" />
+
+
     <include layout="@layout/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/front_sub"
         android:id="@+id/textView"
         android:layout_marginBottom="10dp" />
 

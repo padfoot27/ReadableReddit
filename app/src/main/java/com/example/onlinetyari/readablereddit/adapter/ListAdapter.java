@@ -56,6 +56,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int IMAGE = 2;
     public static final int GIF_ = 3;
     public static final int LINK = 4;
+    public static final int LOAD_MORE = 5;
     public static final String IMGUR_HOST_IMAGE = "i.imgur.com";
     public static final String IMGUR_HOST_IMAGE_MOBILE = "m.imgur.com";
     public static final String IMGUR_HOST_ALBUM = "a";
@@ -66,7 +67,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String GIF = "gif";
     public static final String GIFV = "gifv";
     private static final int visibleThreshold = 5;
+    private static final String REDDIT_HOST = "www.reddit.com";
     private static final int optimumResolution = 640 * 480;
+
+    public boolean loader;
 
     private EndlessScrollListener endlessScrollListener;
 
@@ -76,6 +80,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
         this.endlessScrollListener = endlessScrollListener;
         this.subReddit = subReddit;
+        this.loader = true;
     }
 
     private static OnItemClickListener onItemClickListener;
@@ -97,27 +102,58 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RecyclerView.ViewHolder viewHolder;
 
         switch (viewType) {
-            case TEXT : View v1 = inflater.inflate(R.layout.layout_viewholder_text, parent, false);
+            case TEXT : View v1;
+                        if (subReddit.equals(""))
+                            v1 = inflater.inflate(R.layout.layout_viewholder_text_front, parent, false);
+                        else
+                            v1 = inflater.inflate(R.layout.layout_viewholder_text, parent, false);
+
                         viewHolder = new ViewHolderText(v1);
                         break;
 
-            case TITLE : View v2 = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
-                         viewHolder = new ViewHolderTitle(v2);
-                         break;
+            case TITLE : View v2;
+                        if (subReddit.equals(""))
+                            v2 = inflater.inflate(R.layout.layout_viewholder_title_front, parent, false);
+                        else
+                            v2 = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
 
-            case IMAGE : View v3 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
-                             viewHolder = new ViewHolderImageGIF(v3);
-                             break;
+                        viewHolder = new ViewHolderTitle(v2);
+                        break;
 
-            case GIF_ : View v4 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
-                       viewHolder = new ViewHolderImageGIF(v4);
-                       break;
+            case IMAGE : View v3;
+                        if (subReddit.equals(""))
+                            v3 = inflater.inflate(R.layout.layout_viewholder_image_gif_front, parent, false);
+                        else
+                            v3 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
+                        viewHolder = new ViewHolderImageGIF(v3);
+                        break;
 
-            case LINK : View v5 = inflater.inflate(R.layout.layout_viewholder_link_new, parent, false);
+            case GIF_ : View v4;
+                        if (subReddit.equals(""))
+                            v4 = inflater.inflate(R.layout.layout_viewholder_image_gif_front, parent, false);
+                        else
+                            v4 = inflater.inflate(R.layout.layout_viewholder_image_gif, parent, false);
+                        viewHolder = new ViewHolderImageGIF(v4);
+                        break;
+
+            case LINK : View v5;
+                        if (subReddit.equals(""))
+                            v5 = inflater.inflate(R.layout.layout_viewholder_link_new_front, parent, false);
+                        else
+                            v5 = inflater.inflate(R.layout.layout_viewholder_link_new, parent, false);
                         viewHolder = new ViewHolderLinkNew(v5);
                         break;
 
-            default : View v = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
+            case LOAD_MORE : View v6 = inflater.inflate(R.layout.layout_load_more, parent, false);
+                             viewHolder = new ViewHolderLoadAnim(v6);
+                             break;
+
+            default : View v;
+                      if (subReddit.equals(""))
+                          v = inflater.inflate(R.layout.layout_viewholder_title_front, parent, false);
+                      else
+                          v = inflater.inflate(R.layout.layout_viewholder_title, parent, false);
+
                       viewHolder = new ViewHolderTitle(v);
                       break;
         }
@@ -145,6 +181,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case LINK : configureLinkViewNewHolder((ViewHolderLinkNew) holder, position);
                         break;
 
+            case LOAD_MORE : configureLoadAnimViewHolder((ViewHolderLoadAnim) holder, position);
+                             break;
+
             default : configureTitleViewHolder((ViewHolderTitle) holder, position);
                       break;
         }
@@ -158,11 +197,19 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mPosts.size();
+        if (loader)
+            return mPosts.size() + 1;
+        else return mPosts.size();
     }
 
     @Override
     public int getItemViewType(int position) {
+
+        if (mPosts.size() <= position)
+            return LOAD_MORE;
+
+        if (mPosts.get(position) == null)
+            return LOAD_MORE;
 
         boolean image_gif = false;
         URL url = null;
@@ -228,19 +275,41 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void configureTextViewHolder(ViewHolderText viewHolderText, int position) {
 
+        if (viewHolderText.front != null)
+            viewHolderText.front.setText(String .format(resources.getString(R.string.subr), mPosts.get(position).subreddit));
+
         viewHolderText.textView.setText(mPosts.get(position).getTitle());
         viewHolderText.textViewText.setText(mPosts.get(position).getSelftext());
         viewHolderText.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
-        viewHolderText.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        // viewHolderText.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        Integer numComments = Integer.parseInt(mPosts.get(position).getNum_comments());
+        viewHolderText.comments.setText(resources.getQuantityString(R.plurals.comment, numComments, numComments));
         RxView.clicks(viewHolderText.share)
                 .subscribe(aVoid -> {
                     shareFunction(mPosts.get(position).getTitle(), mPosts.get(position).getUrl());
                 });
 
-        RxView.clicks(viewHolderText.textView)
-                .subscribe(aVoid -> {
-                    startWebViewActivity(mPosts.get(position).getUrl());
-                });
+        URL url = null;
+
+        try {
+            url = new URL(mPosts.get(position).getUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (url != null && url.getHost().equals(REDDIT_HOST)) {
+            RxView.clicks(viewHolderText.textView)
+                    .subscribe(aVoid -> {
+                        startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                    });
+
+        }
+        else {
+            RxView.clicks(viewHolderText.textView)
+                    .subscribe(aVoid -> {
+                        startWebViewActivity(mPosts.get(position).getUrl());
+                    });
+        }
 
         RxView.clicks(viewHolderText.comments)
                 .subscribe(aVoid -> {
@@ -251,19 +320,41 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void configureTitleViewHolder(ViewHolderTitle viewHolderTitle, int position) {
 
+        if (viewHolderTitle.front != null)
+            viewHolderTitle.front.setText(String .format(resources.getString(R.string.subr), mPosts.get(position).subreddit));
 
         viewHolderTitle.textView.setText(mPosts.get(position).getTitle());
         viewHolderTitle.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
-        viewHolderTitle.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        // viewHolderTitle.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        Integer numComments = Integer.parseInt(mPosts.get(position).getNum_comments());
+        viewHolderTitle.comments.setText(resources.getQuantityString(R.plurals.comment, numComments, numComments));
+
         RxView.clicks(viewHolderTitle.share)
                 .subscribe(aVoid -> {
                     shareFunction(mPosts.get(position).getTitle(), mPosts.get(position).getUrl());
                 });
 
-        RxView.clicks(viewHolderTitle.textView)
-                .subscribe(aVoid -> {
-                    startWebViewActivity(mPosts.get(position).getUrl());
-                });
+        URL url = null;
+
+        try {
+            url = new URL(mPosts.get(position).getUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (url != null && url.getHost().equals(REDDIT_HOST)) {
+            RxView.clicks(viewHolderTitle.textView)
+                    .subscribe(aVoid -> {
+                        startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                    });
+
+        }
+        else {
+            RxView.clicks(viewHolderTitle.textView)
+                    .subscribe(aVoid -> {
+                        startWebViewActivity(mPosts.get(position).getUrl());
+                    });
+        }
 
         RxView.clicks(viewHolderTitle.comments)
                 .subscribe(aVoid -> {
@@ -274,10 +365,15 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void configureLinkViewHolder(ViewHolderLink viewHolderLink, int position) {
 
+        if (viewHolderLink.front != null)
+            viewHolderLink.front.setText(String.format(resources.getString(R.string.subr), mPosts.get(position).subreddit));
+
         viewHolderLink.textView.setText(mPosts.get(position).getTitle());
         viewHolderLink.textViewText.setText(String.valueOf(mPosts.get(position).getUrl()));
         viewHolderLink.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
-        viewHolderLink.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        // viewHolderLink.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        Integer numComments = Integer.parseInt(mPosts.get(position).getNum_comments());
+        viewHolderLink.comments.setText(resources.getQuantityString(R.plurals.comment, numComments, numComments));
 
         RxView.clicks(viewHolderLink.share)
                 .subscribe(aVoid -> {
@@ -297,6 +393,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void configureTextViewImageGIF(ViewHolderImageGIF viewHolderImageGIF, int position, int type) {
+
+        if (viewHolderImageGIF.front != null)
+            viewHolderImageGIF.front.setText(String.format(resources.getString(R.string.subr), mPosts.get(position).subreddit));
 
         viewHolderImageGIF.textView.setText(mPosts.get(position).getTitle());
 
@@ -322,7 +421,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         viewHolderImageGIF.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
-        viewHolderImageGIF.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        // viewHolderImageGIF.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        Integer numComments = Integer.parseInt(mPosts.get(position).getNum_comments());
+        viewHolderImageGIF.comments.setText(resources.getQuantityString(R.plurals.comment, numComments, numComments));
+
         boolean toggleFilter = true;
         RxView.clicks(viewHolderImageGIF.comments)
                 .subscribe(aVoid -> {
@@ -344,6 +446,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void configureLinkViewNewHolder(ViewHolderLinkNew viewHolderLinkNew, int position) {
+
+        if (viewHolderLinkNew.front != null)
+            viewHolderLinkNew.front.setText(String .format(resources.getString(R.string.subr), mPosts.get(position).subreddit));
+
         viewHolderLinkNew.textView.setText(mPosts.get(position).getTitle());
 
         String imageURL = null;
@@ -379,17 +485,29 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         viewHolderLinkNew.points.setText(String.format(resources.getString(R.string.score), mPosts.get(position).getScore()));
-        viewHolderLinkNew.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        // viewHolderLinkNew.comments.setText(String.format(resources.getString(R.string.comments), mPosts.get(position).getNum_comments()));
+        Integer numComments = Integer.parseInt(mPosts.get(position).getNum_comments());
+        viewHolderLinkNew.comments.setText(resources.getQuantityString(R.plurals.comment, numComments, numComments));
 
         RxView.clicks(viewHolderLinkNew.share)
                 .subscribe(aVoid -> {
                     shareFunction(mPosts.get(position).getTitle(), mPosts.get(position).getUrl());
                 });
 
-        RxView.clicks(viewHolderLinkNew.textView)
-                .subscribe(aVoid -> {
-                    startWebViewActivity(mPosts.get(position).getUrl());
-                });
+
+        if (url != null && url.getHost().equals(REDDIT_HOST)) {
+            RxView.clicks(viewHolderLinkNew.textView)
+                    .subscribe(aVoid -> {
+                        startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
+                    });
+
+        }
+        else {
+            RxView.clicks(viewHolderLinkNew.textView)
+                    .subscribe(aVoid -> {
+                        startWebViewActivity(mPosts.get(position).getUrl());
+                    });
+        }
 
         RxView.clicks(viewHolderLinkNew.link)
                 .subscribe(aVoid -> {
@@ -400,7 +518,20 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .subscribe(aVoid -> {
                     startCommentActivity(mPosts.get(position).getId(), mPosts.get(position).subreddit);
                 });
+    }
 
+    public void configureLoadAnimViewHolder(ViewHolderLoadAnim viewHolderLoadAnim, int position) {
+        if (mPosts.size() == 0) {
+            viewHolderLoadAnim.progressBar.setVisibility(View.GONE);
+            return;
+        }
+
+        if (!loader) {
+            viewHolderLoadAnim.progressBar.setVisibility(View.GONE);
+            return;
+        }
+
+        viewHolderLoadAnim.progressBar.setVisibility(View.VISIBLE);
     }
 
     public void shareFunction(String title, String link) {

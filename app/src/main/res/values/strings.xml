@@ -6,6 +6,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_display_post">DisplayPostActivity</string>
     <string name="title_activity_displat_comments">DisplatCommentsActivity</string>
+    
+    
     <string name="comments">%1$s Comments</string>
     <string name="score">Score %1$d</string>
     <string name="subr">/r/%1s</string>
@@ -39,10 +41,31 @@
     <string name="tifu">Today I Fucked Up</string>
     <string name="gif">GIFs</string>
     <string name="front_page">Front Page</string>
+    <string name="world_news">World News</string>
+    <string name="ama">Ask Me Anything</string>
+    <string name="mildly_interesting">Mildly Interesting</string>
+    <string name="documentaries">Documentaries</string>
+    <string name="diy">Do It Yourself</string>
+    <string name="listen_to_this">Listen To This</string>
+    <string name="personal_finance">Personal Finance</string>
+    <string name="space">Space</string>
+    <string name="writing_prompts">Writing Prompts</string>
+    <string name="art">Art</string>
+    <string name="startups">Startups</string>
+    <string name="technology">Technology</string>
 
     <string name="title_activity_web_view">WebViewActivity</string>
 
     <string name="load_more">Click to View More</string>
     <string name="title_activity_gif">GifActivity</string>
     <string name="title_activity_display_comments">DisplayCommentsActivity</string>
+    <string name="load">Load More…</string>
+
+    <string name="dialog_title">Needs Help!</string>
+    <string name="dialog_content">Ping the dev at siddharthv93@gmail.com or Contribute at https://github.com/padfoot27/ReadableReddit</string>
+
+    <plurals name="comment">
+        <item quantity="one">%1$s Comment</item>
+        <item quantity="other">%1$s Comments</item>
+    </plurals>
 </resources>

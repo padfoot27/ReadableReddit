@@ -13,6 +13,7 @@ import com.example.onlinetyari.readablereddit.R;
  */
 public class ViewHolderImageGIF extends RecyclerView.ViewHolder {
 
+    public TextView front;
     public TextView textView;
     public ImageView image_gif;
     public TextView comments;
@@ -21,6 +22,10 @@ public class ViewHolderImageGIF extends RecyclerView.ViewHolder {
 
     public ViewHolderImageGIF(View itemView) {
         super(itemView);
+        front = null;
+        if (itemView.findViewById(R.id.front_sub) != null)
+            front = (TextView) itemView.findViewById(R.id.front_sub);
+
         textView = (TextView) itemView.findViewById(R.id.textView);
         image_gif = (ImageView) itemView.findViewById(R.id.image);
         comments = (TextView) itemView.findViewById(R.id.comments);

@@ -1,5 +1,7 @@
 package com.example.onlinetyari.readablereddit.api;
 
+import com.example.onlinetyari.readablereddit.CommentDataDeserializer;
+import com.example.onlinetyari.readablereddit.pojo.CommentData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,6 +21,7 @@ public class RedditAPI {
 
     public static void setupRedditAPI() {
         Gson gson = new GsonBuilder().
+                registerTypeAdapter(CommentData.class, new CommentDataDeserializer()).
                 excludeFieldsWithoutExposeAnnotation().
                 create();
 

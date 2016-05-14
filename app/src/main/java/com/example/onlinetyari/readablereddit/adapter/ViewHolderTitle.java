@@ -14,6 +14,7 @@ import com.jakewharton.rxbinding.view.RxView;
  */
 public class ViewHolderTitle extends RecyclerView.ViewHolder {
 
+    public TextView front;
     public TextView textView;
     public TextView comments;
     public TextView points;
@@ -21,7 +22,9 @@ public class ViewHolderTitle extends RecyclerView.ViewHolder {
 
     public ViewHolderTitle(View itemView) {
         super(itemView);
-
+        front = null;
+        if (itemView.findViewById(R.id.front_sub) != null)
+            front = (TextView) itemView.findViewById(R.id.front_sub);
         textView = (TextView) itemView.findViewById(R.id.textView);
         comments = (TextView) itemView.findViewById(R.id.comments);
         points = (TextView) itemView.findViewById(R.id.points);

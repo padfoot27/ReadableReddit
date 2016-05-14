@@ -1,8 +1,6 @@
 package com.example.onlinetyari.readablereddit.pojo;
 
-import android.util.Log;
 
-import com.example.onlinetyari.readablereddit.pojo.Comment;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -31,6 +29,6 @@ public class CommentData {
     @Expose
     public String id;
 
-    /*@Expose
-    public String replies;*/
+    @Expose
+    public InitialDataComment replies;
 }

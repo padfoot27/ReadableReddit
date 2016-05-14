@@ -11,6 +11,7 @@ import com.example.onlinetyari.readablereddit.R;
  */
 public class ViewHolderComment extends RecyclerView.ViewHolder {
 
+    public TextView front;
     public TextView time;
     public TextView author;
     public TextView textView;
@@ -19,6 +20,9 @@ public class ViewHolderComment extends RecyclerView.ViewHolder {
 
     public ViewHolderComment(View itemView) {
         super(itemView);
+        front = null;
+        if (itemView.findViewById(R.id.front_sub) != null)
+            front = (TextView) itemView.findViewById(R.id.front_sub);
 
         time = (TextView) itemView.findViewById(R.id.time);
         author = (TextView) itemView.findViewById(R.id.author);

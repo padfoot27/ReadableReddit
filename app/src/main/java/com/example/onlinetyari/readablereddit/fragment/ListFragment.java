@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -60,6 +61,7 @@ public class ListFragment extends Fragment implements
     private String url;
     public RelativeLayout relativeLayoutProgress;
     public ProgressBar progressBar;
+    public String prevAfter = null;
 
 
     public static final String BASE_URL = "https://api.reddit.com/r/";
@@ -97,7 +99,6 @@ public class ListFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         relativeLayoutProgress = (RelativeLayout) view.findViewById(R.id.loadingPanel);
@@ -178,10 +179,30 @@ public class ListFragment extends Fragment implements
                             relativeLayoutProgress.setVisibility(View.GONE);
                         })
                         .doOnError(throwable -> Log.v("Error", "Data subscription"))
-                .subscribe(postData1 -> {
+                /*.subscribe(postData1 -> {
                     if (!listAdapter.mPosts.contains(postData1)) {
                         listAdapter.mPosts.add(postData1);
                         listAdapter.notifyItemChanged(listAdapter.getItemCount() - 1);
+                    }
+                })*/
+                .subscribe(new Subscriber<PostData>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        relativeLayoutProgress.setVisibility(View.GONE);
+                        Log.v("Error", "Some error occured");
+                    }
+
+                    @Override
+                    public void onNext(PostData postData) {
+                        if (!listAdapter.mPosts.contains(postData)) {
+                            listAdapter.mPosts.add(postData);
+                            listAdapter.notifyItemChanged(listAdapter.getItemCount() - 1);
+                        }
                     }
                 });
 
@@ -216,12 +237,33 @@ public class ListFragment extends Fragment implements
                 .subscribeOn(Schedulers.io())
                 .doOnError(throwable -> Log.v("error", "error"))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(postDataList -> {
+                /*.subscribe(postDataList -> {
                     postDataList.addAll(listAdapter.mPosts);
                     listAdapter.clear();
                     listAdapter.addAll(postDataList);
                     swipeRefreshLayout.setRefreshing(false);
+                })*/
+                .subscribe(new Subscriber<List<PostData>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.v("Error", "Some error occured");
+                    }
+
+                    @Override
+                    public void onNext(List<PostData> postDataList) {
+                        postDataList.addAll(listAdapter.mPosts);
+                        listAdapter.clear();
+                        listAdapter.addAll(postDataList);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 });
+
         compositeSubscription.add(subscription);
     }
 
@@ -230,6 +272,8 @@ public class ListFragment extends Fragment implements
 
         String after = listAdapter.mPosts.get(listAdapter.mPosts.size() - 1).getName();
 
+
+        listAdapter.loader = true;
         Subscription subscription = RedditAPI.redditRetroService.getData(url, null, after, null, 1)
                 .map(initialData -> initialData.data.children)
                 .flatMap(Observable::from)
@@ -238,10 +282,35 @@ public class ListFragment extends Fragment implements
                 .subscribeOn(Schedulers.io())
                 .doOnError(throwable -> Log.v("error", "error"))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(postDataList1 -> {
+                /*.subscribe(postDataList1 -> {
                     listAdapter.addAll(postDataList1);
                     int currentSize = listAdapter.getItemCount();
                     listAdapter.notifyItemRangeInserted(currentSize, postDataList1.size() - 1);
+                })*/
+                .subscribe(new Subscriber<List<PostData>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listAdapter.loader = false;
+                        listAdapter.notifyDataSetChanged();
+                        Log.v("Error", "Some error occured");
+                    }
+
+                    @Override
+                    public void onNext(List<PostData> postDataList) {
+                        listAdapter.addAll(postDataList);
+                        int currentSize = listAdapter.getItemCount();
+                        if (postDataList.size() == 0) {
+                            listAdapter.loader = false;
+                            listAdapter.notifyDataSetChanged();
+                        }
+                        else
+                            listAdapter.notifyItemRangeInserted(currentSize, postDataList.size() - 1);
+                    }
                 });
         compositeSubscription.add(subscription);
     }

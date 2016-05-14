@@ -16,6 +16,8 @@ import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
 import com.jakewharton.rxbinding.view.RxView;
 
+import java.net.URL;
+
 import rx.functions.Action1;
 
 public class WebViewActivity extends AppCompatActivity {
@@ -34,21 +36,32 @@ public class WebViewActivity extends AppCompatActivity {
         fab.setBackgroundColor(getResources().getColor(R.color.fab));
 
         webView = (WebView) findViewById(R.id.webview);
-        textView = (TextView) findViewById(R.id.url);
 
         webView.setWebViewClient(new RedditClient());
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
-        String url = intent.getStringExtra(IntentConstants.URL);
-        textView.setText(url);
+        String urlString = intent.getStringExtra(IntentConstants.URL);
+
+        URL url = null;
+
+        try {
+            url = new URL(urlString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         RxView.clicks(fab)
                 .subscribe(aVoid -> {
-                    shareFunction(url);
+                    shareFunction(urlString);
                 });
 
-        setTitle("Readable Reddit");
-        webView.loadUrl(url);
+        if (url == null)
+            setTitle("Readable Reddit");
+
+        else setTitle(url.getHost());
+
+        webView.loadUrl(urlString);
     }
 
     public class RedditClient extends WebViewClient {

@@ -13,6 +13,7 @@ import com.example.onlinetyari.readablereddit.R;
  */
 public class ViewHolderLink extends RecyclerView.ViewHolder {
 
+    public TextView front;
     public TextView textView;
     public TextView textViewText;
     public TextView comments;
@@ -22,6 +23,9 @@ public class ViewHolderLink extends RecyclerView.ViewHolder {
     public ViewHolderLink(View itemView) {
 
         super(itemView);
+        front = null;
+        if (itemView.findViewById(R.id.front_sub) != null)
+            front = (TextView) itemView.findViewById(R.id.front_sub);
 
         textView = (TextView) itemView.findViewById(R.id.textView);
         textViewText = (TextView) itemView.findViewById(R.id.textViewText);
