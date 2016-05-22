@@ -47,7 +47,6 @@ public class ListFragment extends Fragment implements
         EndlessScrollListener
 
 {
-
     private String title;
     private Integer page;
     public String subReddit;

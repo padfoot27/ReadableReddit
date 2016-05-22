@@ -49,6 +49,7 @@ public class ListActivity extends AppCompatActivity {
         setupDrawerContent(navigationView);
 
         viewPager = (ViewPager) findViewById(R.id.vpPager);
+        assert viewPager != null;
         viewPager.setOffscreenPageLimit(2);
         ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
         listTabbedFragment.setSubReddit(FragmentConstants.FRONT_PAGE);
@@ -57,6 +58,7 @@ public class ListActivity extends AppCompatActivity {
         viewPager.setCurrentItem(1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        assert tabLayout != null;
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -99,256 +101,128 @@ public class ListActivity extends AppCompatActivity {
         );
     }
 
+    public void setFragment(String subReddit, Integer title) {
+        ListTabbedFragment listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
+        listTabbedFragment.setSubReddit(subReddit);
+        viewPager.setAdapter(listTabbedFragment);
+        viewPager.setCurrentItem(1);
+        mDrawer.closeDrawer(GravityCompat.START);
+        setTitle(title);
+    }
+
     public void selectDrawerItem(MenuItem menuItem) {
 
         ListTabbedFragment listTabbedFragment;
 
         switch (menuItem.getItemId()) {
             case R.id.ask_redddit :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.ASK_REDDIT);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.ask_reddit);
+                setFragment(FragmentConstants.ASK_REDDIT, R.string.ask_reddit);
                 break;
 
             case R.id.pics :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.PICS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.pics);
+                setFragment(FragmentConstants.PICS, R.string.pics);
                 break;
 
             case R.id.todayilearned :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.TODAY_I_LEARNED);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.todayilearned);
+                setFragment(FragmentConstants.TODAY_I_LEARNED, R.string.todayilearned);
                 break;
 
             case R.id.dataisbeautiful :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.DATA_IS_BEAUTIFUL);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.dataisbeautiful);
+                setFragment(FragmentConstants.DATA_IS_BEAUTIFUL, R.string.dataisbeautiful);
                 break;
 
             case R.id.funny :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.FUNNY);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.funny);
+                setFragment(FragmentConstants.FUNNY, R.string.funny);
                 break;
 
             case R.id.movies :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.MOVIES);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.movies);
+                setFragment(FragmentConstants.MOVIES, R.string.movies);
                 break;
 
             case R.id.music :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.MUSIC);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.music);
+                setFragment(FragmentConstants.MUSIC, R.string.music);
                 break;
 
             case R.id.philosphy :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.PHILOSOPHY);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.philosphy);
+                setFragment(FragmentConstants.PHILOSOPHY, R.string.philosphy);
                 break;
 
 
             case R.id.showerthoughts :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.SHOWER_THOUGHTS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.showerthoughts);
+                setFragment(FragmentConstants.SHOWER_THOUGHTS, R.string.showerthoughts);
                 break;
 
             case R.id.tifu :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.TIFU);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.tifu);
+                setFragment(FragmentConstants.TIFU, R.string.tifu);
                 break;
 
             case R.id.aww :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.AWW);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.aww);
+                setFragment(FragmentConstants.AWW, R.string.aww);
                 break;
 
             case R.id.explainlikeimfive :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.EXPLAINLIKEIMFIVE);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.explainlikeimfive);
+                setFragment(FragmentConstants.EXPLAINLIKEIMFIVE, R.string.explainlikeimfive);
                 break;
 
             case R.id.books :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.BOOKS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.books);
+                setFragment(FragmentConstants.BOOKS, R.string.books);
                 break;
 
             case R.id.science :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.SCIENCE);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.science);
+                setFragment(FragmentConstants.SCIENCE, R.string.science);
                 break;
 
             case R.id.world_news :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.WORLD_NEWS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.world_news);
+                setFragment(FragmentConstants.WORLD_NEWS, R.string.world_news);
                 break;
 
             case R.id.ama :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.AMA);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.ama);
+                setFragment(FragmentConstants.AMA, R.string.ama);
                 break;
 
             case R.id.mildly_interesting :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.MILDLY_INTERESTING);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.mildly_interesting);
+                setFragment(FragmentConstants.MILDLY_INTERESTING, R.string.mildly_interesting);
                 break;
 
             case R.id.documentaries :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.DOCUMENTARIES);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.documentaries);
+                setFragment(FragmentConstants.DOCUMENTARIES, R.string.documentaries);
                 break;
 
             case R.id.diy :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.DIY);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.diy);
+                setFragment(FragmentConstants.DIY, R.string.diy);
                 break;
 
             case R.id.listen_to_this :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.LISTEN_TO_THIS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.listen_to_this);
+                setFragment(FragmentConstants.LISTEN_TO_THIS, R.string.listen_to_this);
                 break;
 
             case R.id.personal_finance :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.PERSONAL_FINANCE);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.personal_finance);
+                setFragment(FragmentConstants.PERSONAL_FINANCE, R.string.personal_finance);
                 break;
 
             case R.id.space :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.SPACE);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.space);
+                setFragment(FragmentConstants.SPACE, R.string.space);
                 break;
 
             case R.id.writing_prompts :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.WRITING_PROMPTS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.writing_prompts);
+                setFragment(FragmentConstants.WRITING_PROMPTS, R.string.writing_prompts);
                 break;
 
             case R.id.art :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.ART);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.art);
+                setFragment(FragmentConstants.ART, R.string.art);
                 break;
 
             case R.id.technology :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.TECHNOLOGY);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.technology);
+                setFragment(FragmentConstants.TECHNOLOGY, R.string.technology);
                 break;
 
             case R.id.startups :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.STARTUPS);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.startups);
+                setFragment(FragmentConstants.STARTUPS, R.string.startups);
                 break;
 
             case R.id.front_page :
-                listTabbedFragment = new ListTabbedFragment(getSupportFragmentManager());
-                listTabbedFragment.setSubReddit(FragmentConstants.FRONT_PAGE);
-                viewPager.setAdapter(listTabbedFragment);
-                viewPager.setCurrentItem(1);
-                mDrawer.closeDrawer(GravityCompat.START);
-                setTitle(R.string.front_page);
+                setFragment(FragmentConstants.FRONT_PAGE, R.string.front_page);
                 break;
-
-
         }
     }
 }

@@ -33,6 +33,7 @@ public class WebViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setBackgroundColor(getResources().getColor(R.color.fab));
 
         webView = (WebView) findViewById(R.id.webview);
