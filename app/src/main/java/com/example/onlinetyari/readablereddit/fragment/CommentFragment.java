@@ -190,12 +190,6 @@ public class CommentFragment extends Fragment implements EndlessScrollListener {
                                 relativeLayoutProgress.setVisibility(View.GONE);
                             })
                             .doOnError(throwable -> Log.v("Error", "Data subscription"))
-                            /*.subscribe(commentData -> {
-                                if (!commentAdapter.mComments.contains(commentData)) {
-                                    commentAdapter.mComments.add(commentData);
-                                    commentAdapter.notifyItemChanged(commentAdapter.getItemCount() - 1);
-                                }
-                            })*/
                         .subscribe(new Subscriber<CommentData>() {
                             @Override
                             public void onCompleted() {

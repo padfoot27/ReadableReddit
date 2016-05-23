@@ -1,6 +1,5 @@
 package com.example.onlinetyari.readablereddit;
 
-import com.example.onlinetyari.readablereddit.pojo.Comment;
 import com.example.onlinetyari.readablereddit.pojo.CommentData;
 import com.example.onlinetyari.readablereddit.pojo.InitialDataComment;
 import com.google.gson.JsonDeserializationContext;

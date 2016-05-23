@@ -16,6 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RedditAPI {
 
+    public static final String BASE_URL = "http://api.reddit.com/";
+
     public static redditRetro redditRetroService;
     public static OkHttpClient okHttpClient;
 
@@ -36,7 +38,7 @@ public class RedditAPI {
         okHttpClient = httpClientBuilder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.reddit.com/")
+                .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

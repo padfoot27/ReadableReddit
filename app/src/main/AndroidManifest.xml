@@ -23,15 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.DisplayPostActivity"
-            android:label="@string/title_activity_display_post"
-            android:parentActivityName=".activity.ListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ListActivity" />
-        </activity>
-        <activity
             android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_web_view"

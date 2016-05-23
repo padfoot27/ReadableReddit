@@ -2,7 +2,6 @@ package com.example.onlinetyari.readablereddit.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,6 @@ import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
 import com.example.onlinetyari.readablereddit.database.PostsDatabaseHelper;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
 import com.example.onlinetyari.readablereddit.R;
-import com.example.onlinetyari.readablereddit.activity.DisplayPostActivity;
 import com.example.onlinetyari.readablereddit.adapter.ListAdapter;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
 
@@ -33,7 +31,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -42,7 +39,6 @@ import rx.subscriptions.CompositeSubscription;
  * A simple {@link Fragment} subclass.
  */
 public class ListFragment extends Fragment implements
-        ListAdapter.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener,
         EndlessScrollListener
 
@@ -103,7 +99,6 @@ public class ListFragment extends Fragment implements
         relativeLayoutProgress = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         postList = (RecyclerView) view.findViewById(R.id.post_list);
         listAdapter = new ListAdapter(new ArrayList<>(), resources, context, subReddit, this);
-        listAdapter.setOnItemClickListener(this);
         postList.setAdapter(listAdapter);
         postList.setLayoutManager(new LinearLayoutManager(context));
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
@@ -178,12 +173,6 @@ public class ListFragment extends Fragment implements
                             relativeLayoutProgress.setVisibility(View.GONE);
                         })
                         .doOnError(throwable -> Log.v("Error", "Data subscription"))
-                /*.subscribe(postData1 -> {
-                    if (!listAdapter.mPosts.contains(postData1)) {
-                        listAdapter.mPosts.add(postData1);
-                        listAdapter.notifyItemChanged(listAdapter.getItemCount() - 1);
-                    }
-                })*/
                 .subscribe(new Subscriber<PostData>() {
                     @Override
                     public void onCompleted() {
@@ -210,15 +199,6 @@ public class ListFragment extends Fragment implements
     }
 
     @Override
-    public void onItemClick(View itemView, int position) {
-        Intent intent = new Intent(context, DisplayPostActivity.class);
-        intent.putExtra(IntentConstants.DISPLAY_TITLE, listAdapter.mPosts.get(position).title);
-        intent.putExtra(IntentConstants.DISPLAY_IMAGE, listAdapter.mPosts.get(position).url);
-
-        startActivity(intent);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         compositeSubscription.unsubscribe();
@@ -236,12 +216,6 @@ public class ListFragment extends Fragment implements
                 .subscribeOn(Schedulers.io())
                 .doOnError(throwable -> Log.v("error", "error"))
                 .observeOn(AndroidSchedulers.mainThread())
-                /*.subscribe(postDataList -> {
-                    postDataList.addAll(listAdapter.mPosts);
-                    listAdapter.clear();
-                    listAdapter.addAll(postDataList);
-                    swipeRefreshLayout.setRefreshing(false);
-                })*/
                 .subscribe(new Subscriber<List<PostData>>() {
                     @Override
                     public void onCompleted() {
@@ -281,11 +255,6 @@ public class ListFragment extends Fragment implements
                 .subscribeOn(Schedulers.io())
                 .doOnError(throwable -> Log.v("error", "error"))
                 .observeOn(AndroidSchedulers.mainThread())
-                /*.subscribe(postDataList1 -> {
-                    listAdapter.addAll(postDataList1);
-                    int currentSize = listAdapter.getItemCount();
-                    listAdapter.notifyItemRangeInserted(currentSize, postDataList1.size() - 1);
-                })*/
                 .subscribe(new Subscriber<List<PostData>>() {
                     @Override
                     public void onCompleted() {

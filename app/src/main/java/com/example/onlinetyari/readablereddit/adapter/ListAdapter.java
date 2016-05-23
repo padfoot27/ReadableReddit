@@ -5,26 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.onlinetyari.readablereddit.R;
 import com.example.onlinetyari.readablereddit.ReadableRedditApp;
 import com.example.onlinetyari.readablereddit.activity.DisplayCommentsActivity;
-import com.example.onlinetyari.readablereddit.activity.DisplayPostActivity;
 import com.example.onlinetyari.readablereddit.activity.WebViewActivity;
-import com.example.onlinetyari.readablereddit.api.RedditAPI;
-import com.example.onlinetyari.readablereddit.constants.FragmentConstants;
 import com.example.onlinetyari.readablereddit.constants.IntentConstants;
-import com.example.onlinetyari.readablereddit.pojo.CommentData;
-import com.example.onlinetyari.readablereddit.pojo.InitialData;
-import com.example.onlinetyari.readablereddit.pojo.InitialDataComment;
 import com.example.onlinetyari.readablereddit.pojo.PostData;
 import com.example.onlinetyari.readablereddit.pojo.Source;
 import com.jakewharton.rxbinding.view.RxView;
@@ -33,12 +24,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 
 /**
